@@ -31,9 +31,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'empathy.apps.EmpathyConfig'
-    'smile.apps.SmileConfig'
-    'status.apps.StatusConfig'
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
