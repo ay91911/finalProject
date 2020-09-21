@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'empathy.apps.EmpathyConfig',
     'status.apps.StatusConfig',
     'users.apps.UsersConfig',
+    'crispy_forms',
 
 ]
 
@@ -124,4 +125,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
