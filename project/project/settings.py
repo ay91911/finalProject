@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'smile.apps.SmileConfig',
     'empathy.apps.EmpathyConfig',
     'status.apps.StatusConfig',
-    'users.apps.UsersConfig'
+    'users.apps.UsersConfig',
 
 ]
 
@@ -124,3 +124,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
