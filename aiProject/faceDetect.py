@@ -47,20 +47,20 @@ def videoCamera():
             label = EMOTIONS[preds.argmax()]
 
 
-            if preds.argmax() == 0:
-                cv2.putText(frame,
-                            label,
-                            (fX, fY),
-                            cv2.FONT_HERSHEY_SIMPLEX,
-                            2,
-                            (255, 255, 0),
-                            2)
-                cv2.rectangle(frame,
-                              (fX, fY),  # 사각형의 시작점
-                              (fX + fW, fY + fH),  # 시작점과 대각선에 있는 사각형의 끝점
-                              (255, 255, 0),  # 사각형 색
-                              3  # 선굵기(default =1), -1이면 사각형 내부가 채워짐
-                              )
+
+            cv2.putText(frame,
+                        label,
+                        (fX, fY),
+                        cv2.FONT_HERSHEY_SIMPLEX,
+                        2,
+                        (255, 255, 0),
+                        2)
+            cv2.rectangle(frame,
+                          (fX, fY),  # 사각형의 시작점
+                          (fX + fW, fY + fH),  # 시작점과 대각선에 있는 사각형의 끝점
+                          (255, 255, 0),  # 사각형 색
+                          3  # 선굵기(default =1), -1이면 사각형 내부가 채워짐
+                          )
 
 
 
