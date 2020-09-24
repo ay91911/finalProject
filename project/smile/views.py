@@ -1,3 +1,78 @@
+from django.shortcuts import render
+from django.views.decorators import gzip
+from django.http import StreamingHttpResponse, HttpResponseServerError
+import cv2
+from tensorflow.keras.models import load_model
+
+context = {
+        'title': 'Home'
+    }
+
+
+
+class VideoCamera:
+    def __init__(self):
+        self.video = cv2.VideoCapture(0)
+        self.cascade = cv2.CascadeClassifier('C:/dev/finalProject/project/smile/detection_models/haarcascade_frontalface_default.xml')
+
+        #추가코드
+
+
+
+    def __del__(self):
+        self.video.release()
+
+    def get_frame(self):
+        success, frame = self.video.read()
+        success, jpeg = cv2.imencode('.jpg',frame)
+        return jpeg.tobytes()
+
+    def get_frame(self):
+        success, frame = self.video.read()
+        self.gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        self.faces = self.cascade.detectMultiScale(self.gray,scaleFactor=1.1, minNeighbors=5)
+        for (x,y,w,h) in self.faces:
+            image = cv2.rectangle(frame,(x, y), (x+w, y+h), (255, 0, 0), 2)
+            cv2.putText(image, 'Face',(x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 2, (11, 52, 243), 2)
+
+        success, jpeg = cv2.imencode('.jpg',frame)
+        return jpeg.tobytes()
+
+
+
+def gen(camera):
+    while True:
+        frame = camera.get_frame()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+
+def video(request):
+    try:
+        return StreamingHttpResponse(gen(VideoCamera()),content_type="multipart/x-mixed-replace;boundary=frame")
+    except HttpResponseServerError as e:
+        print("asborted", e)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'''
+# 첫번째 시도한 코드 아래 참조
+
 import cv2,os
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse, StreamingHttpResponse, HttpResponseServerError
@@ -18,7 +93,7 @@ def home(request):
 
 # model path
 detection_model_path = 'detection_models/haarcascade_frontalface_default.xml'
-emotion_model_path = 'C:/dev/finalProject2/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
+emotion_model_path = 'C:/dev/finalProject/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
 print(os.path.exists(emotion_model_path))
 #loading models
 face_detection = cv2.CascadeClassifier(detection_model_path)
@@ -41,14 +116,20 @@ video_capture = cv2.VideoCapture(camera)
 #User = get_user_model()  ---오류미해결 _user관련한 DB??!
 
 
+
+
 # stream video actively
 def video(request):
-    return StreamingHttpResponse(gen(), content_type="multipart/x-mixed-replace; boundary=frame"), render(request,'smile/index.html') #내용물형식
+    if request.method =='GET':
+        return StreamingHttpResponse(gen(), content_type="multipart/x-mixed-replace; boundary=frame") #내용물형식
+    else:
+        pass
+    return render(request,'smile/index.html')
 
 # face recognition and expression recognition
 def processImg(object):
     frame_window = 10
-    emotion_offsets = (20, 40)
+    #emotion_offsets = (20, 40)     #tuple의문제인가..
     global face_detection
     global emotion_classifier
     global emotion_labels
@@ -70,7 +151,7 @@ def processImg(object):
     gray_face = gray_face = img_to_array(gray_face)
     gray_face = np.expand_dims(gray_face, axis=0)
 
-    '''emotion output'''
+   
     emotion_prediction = emotion_classifier.predict(gray_face)[0]
     emotion_probablity = np.max(emotion_prediction)
     emotion_label = np.argmax(emotion_prediction)
@@ -104,13 +185,13 @@ def gen():  #generateVideo
     global cameraChange
     while True:
         #time.sleep(0.1)
-        success, frame =video_capture.read()
+        frame =video_capture.read()[1]
 
         try:
-            frame = bytes(cv2.imencode('.jpg',processImg(frame))) # byte단위로 이미지를 읽어와서 jpg로 변환해주는 코드
+            frame = bytes(cv2.imencode('.jpeg',processImg(frame))[1]) # byte단위로 이미지를 읽어와서 jpg로 변환해주는 코드
         except:
             continue
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
-
+'''
