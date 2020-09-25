@@ -82,7 +82,7 @@ def videoCamera():
     cv2.destroyAllWindows()
 
 
-
+'''
 emotion_data = {1:[0.09,"abc"],2:[0.09,"cde"],3:[0.08,"fgd"],4:[0.07,"abc"]}
 prob_list = []
 for keys, values in emotion_data.items():
@@ -92,6 +92,16 @@ max = max(prob_list)
 print(prob_list)
 print(max[0])
 print(max[1])
+'''
+
+data = b'\xd8\x0fI@ff\xe6\x01\x00\x00\x00@'
+print(data)
+data = np.frombuffer(data,np.uint8)
+print(data)
+img_decode = cv2.imdecode(data,cv2.IMREAD_COLOR)
+print(img_decode)
+
+
 
 
 

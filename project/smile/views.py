@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.decorators import gzip
 from django.http import StreamingHttpResponse, HttpResponseServerError
-import cv2
+import cv2,time
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import img_to_array
 import numpy as np
@@ -41,7 +41,7 @@ class VideoCamera_smile:
         # getting input model shapes for inference
         self.emotion_target_size = self.emotion_classifier.input_shape[1:3]  # emotion_target_size = (48,48)
         self.smile_count = 0
-        self.emotion_count = 0
+        self.save_file_count = 0
         self.smile_data = {}    #{count:percent}
 
         '''
@@ -114,7 +114,7 @@ class VideoCamera_smile:
 
             if emotion_text =='happy':
 
-                if self.smile_count <= 30: #30
+                if self.smile_count <= 20: #30
                     self.smile_count +=1
                     image = cv2.rectangle(frame, (fX, fY), (fX + fW, fY + fH), (0,255,100), 2)
                     cv2.putText(image, (str(self.smile_count)+": "+str(emotion_probability)) ,(fX, fY),cv2.FONT_HERSHEY_SIMPLEX, 2, (0,255,100), 4)
@@ -129,7 +129,11 @@ class VideoCamera_smile:
 
                     return jpeg_tobytes
 
-                else:
+                elif self.smile_count > 20:
+
+
+
+
 
 
                     prob_list =[]
@@ -148,10 +152,43 @@ class VideoCamera_smile:
 
                     success, jpeg = cv2.imencode('.jpg', frame)
 
+                    #img write
+                    if len(best_prob) !=0:
+
+
+                        data = best_prob[0][1]  # binary형태의 데이터타입: b'\...\...\...
+                        data = np.frombuffer(data, dtype=np.uint8)  # numpy.uint8변환
+                        img = cv2.imdecode(data, cv2.IMREAD_COLOR)  # color이미지로 불러오기
+                        #cv2.imshow('img_decode', img)
+                        cv2.imwrite(str(self.save_file_count)+'.jpg', img)
+
+
+                        self.save_file_count+=1
+                        best_prob.clear()
+
+
+
+
+
+
+
 
                     return jpeg.tobytes()
 
+
+
+
+
+
+
+
+
+
+
                     #cv2.destroyAllWindows()
+
+            else:
+                self.smile_count = 0
 
 
 
@@ -201,6 +238,8 @@ class VideoCamera_none:
 
     def __del__(self):
         self.video.release()
+
+
 
     def get_frame(self):
         success, frame = self.video.read()
@@ -312,6 +351,20 @@ def gen(camera):
         frame = camera.get_frame()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+
+
+def imgwrite():
+    if len(best_prob)!=0:
+        data = best_prob[1]  # binary형태의 데이터타입: b'\...\...\...
+        data = np.frombuffer(data, dtype=np.uint8)
+        img = cv2.imdecode(data,cv2.IMREAD_COLOR)
+        cv2.imshow('img_decode',img)
+        cv2.imwrite('C:/dev/finalProject/aiProject/01.png',img)
+
+    else:
+        pass
+
+
 
 
 
