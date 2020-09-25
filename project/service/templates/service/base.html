@@ -1,4 +1,4 @@
-{$ load static %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <title>Document</title>
 
-    <link rel="stylesheet" type="text/css" href=main.css>
+    <link rel="stylesheet" type="text/css" href="{% static 'service/main.css' %}">
 
 </head>
 <body>
@@ -31,6 +31,7 @@
         </div>
 
     </header>
+    {% block content %}{% endblock %}
     <footer class="bd-footer bg-dark text-muted ">
       <div class="container-fluid "><!--  -->
         <strong><p>Project designed and built by 유아영, 하대윤, 이장현, 이찬욱 </p></strong>
