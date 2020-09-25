@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'smile.apps.SmileConfig',
     'empathy.apps.EmpathyConfig',
     'status.apps.StatusConfig',
-    'users.apps.UsersConfig'
+    'users.apps.UsersConfig',
+    'service.apps.ServiceConfig',
+    'crispy_forms',
 
 ]
 
@@ -124,3 +126,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+#STATICFILES_DIRS = [
+#    os.path.join(BASE_DIR, 'service', 'static')
+#]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'service', 'static')
+
