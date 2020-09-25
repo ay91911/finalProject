@@ -5,6 +5,7 @@ from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.models import load_model
 import time,os
 
+
 #model path
 model_path01 = 'haarcascade_frontalface_default.xml'
 model_path02 = '_vgg16_01_.34-0.77-0.6478.h5'
@@ -80,5 +81,17 @@ def videoCamera():
     camera.release()
     cv2.destroyAllWindows()
 
-videoCamera()
+
+
+emotion_data = {1:[0.09,"abc"],2:[0.09,"cde"],3:[0.08,"fgd"],4:[0.07,"abc"]}
+prob_list = []
+for keys, values in emotion_data.items():
+    prob_list.append(values)
+
+max = max(prob_list)
+print(prob_list)
+print(max[0])
+print(max[1])
+
+
 
