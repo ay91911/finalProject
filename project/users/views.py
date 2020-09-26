@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import UserRegisterForm
 from .forms import UserForm
 
 def register(request):
@@ -8,9 +7,9 @@ def register(request):
         form = UserForm(request.POST)
         if form.is_valid():
             form.save()
-            username = form.cleaned_data.get('username')
-            messages.success(request, f'Account created for {username}!')
+            USER_NM = form.cleaned_data.get('USER_NM')
+            messages.success(request, f'Account created for {USER_NM}!')
             return redirect('service-mainpage1')
     else:
-        form = UserRegisterForm()
+        form = UserForm()
     return render(request, 'users/register.html', {'form': form})
