@@ -9,7 +9,7 @@ import numpy as np
 from statistics import mode
 emotion_image_data = { 0:None,  #level_1
                        1:None,  #level_2
-                       2:None   #level_3
+                       2:None,   #level_3
 
 }
 
@@ -21,7 +21,7 @@ emotion_labels = ["happy", "angry", "sad", "neutral", "surprise"]
 # initialization
 frame_window = 30
 emotion_window = []
-best_prob_level = {}
+best_prob_level = [None]
 
 
 
@@ -61,7 +61,7 @@ class VideoCamera_smile:
         #학습후 저장된 데이터가 없으면!
         #while len(emotion_image_data) == 0:
         #while emotion_image_data[0] == None:
-        while emotion_image_data[level_index] ==None:
+        while emotion_image_data[level_index] == None:
 
 
 
@@ -130,11 +130,11 @@ class VideoCamera_smile:
 
                         prob_list = []
                         for keys, values in self.smile_data.items():
-                            prob_list.append(values)
+                            prob_list.append(values) # values = [prob, img]
 
-                        if len(best_prob_level) == 0:
+                        if best_prob_level[0] == None:
 
-                            best_prob_level[0] = (max(prob_list))
+                            best_prob_level[0] = max(prob_list) #[[prob, img]]
                             draw_rectangle(face_coordinates, frame, (0, 255, 100))
                             put_text(face_coordinates, frame, (str(self.smile_count) + ": " + str(emotion_probability)),(0, 255, 100))
                             success, jpeg = cv2.imencode('.jpg', frame)
@@ -147,7 +147,7 @@ class VideoCamera_smile:
 
 
                         else:
-                            best_prob_level.clear()
+                            best_prob_level[0]= None
 
 
 
@@ -255,11 +255,13 @@ def imgwrite(best_prob_level,emotion_image_data):
 
 
 def imgwrite(best_prob_level,emotion_image_data,level_index):
+    data_prob = best_prob_level[0][0]
     data_img = best_prob_level[0][1]
     img = cv2.imdecode(data_img, cv2.IMREAD_COLOR)
-    cv2.imwrite('C:/dev/finalProject/aiProject/'+'best_level'+str(level_index+1)+'.png', img)
+    cv2.imwrite('C:/dev/finalProject/aiProject/images/'+'best_level'+str(level_index+1)+'.png', img)
 
-    emotion_image_data[level_index] = best_prob_level
+    #emotion_image_data[level_index] = best_prob_level
+    emotion_image_data[level_index] = best_prob_level[0]
     print(emotion_image_data)
     print(len(emotion_image_data))
 

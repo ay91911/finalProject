@@ -122,3 +122,22 @@ best_prob[0] = [0.9, "absdfsjidf"]
 print(best_prob)
 print(best_prob[1] ==None)
 
+
+lis =[None]
+print(lis[0]==None)
+print("==========================")
+best =[]
+a = [0.6,"abjsdlkfjs"]
+b = [0.8,"sdfsdsdfsd"]
+lis.append(a)
+lis.append(b)
+print(max(lis))
+best.append(max(lis))
+print(best[0])
+
+best_prob[1] = best[0]
+print(best_prob)
+
+
+
+
