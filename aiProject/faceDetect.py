@@ -98,9 +98,45 @@ data = b'\xd8\x0fI@ff\xe6\x01\x00\x00\x00@'
 print(data)
 data = np.frombuffer(data,np.uint8)
 print(data)
+print(type(data))
 img_decode = cv2.imdecode(data,cv2.IMREAD_COLOR)
 print(img_decode)
 
+import operator
+best_prob = {1:[0.9,"a"],2:[0.91,"a"],3:[0.89,"b"],4:[0.78,"c"]}
+
+s_best_prob = sorted(best_prob.items(), key=operator.itemgetter(1),reverse=True)
+print(s_best_prob)
+print(s_best_prob[0][1][1])
+print(s_best_prob[1][1])
+print(s_best_prob[2][1])
+
+
+best_prob = {0:None,
+             1:None,
+             2:None
+             }
+
+
+best_prob[0] = [0.9, "absdfsjidf"]
+print(best_prob)
+print(best_prob[1] ==None)
+
+
+lis =[None]
+print(lis[0]==None)
+print("==========================")
+best =[]
+a = [0.6,"abjsdlkfjs"]
+b = [0.8,"sdfsdsdfsd"]
+lis.append(a)
+lis.append(b)
+print(max(lis))
+best.append(max(lis))
+print(best[0])
+
+best_prob[1] = best[0]
+print(best_prob)
 
 
 
