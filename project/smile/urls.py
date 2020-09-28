@@ -6,4 +6,7 @@ urlpatterns = [
     path('video/', smile_views.video_smile, name='Video_smile'),
     path('video/1/',smile_views.video_none, name='Video_none'),
 
+
+
+
 ]
