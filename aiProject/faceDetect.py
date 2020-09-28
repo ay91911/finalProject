@@ -4,7 +4,7 @@ import tensorflow as tf
 from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.models import load_model
 import time,os
-
+from os.path import split
 
 #model path
 model_path01 = 'haarcascade_frontalface_default.xml'
@@ -124,19 +124,12 @@ print(best_prob[1] ==None)
 
 
 lis =[None]
-print(lis[0]==None)
-print("==========================")
-best =[]
-a = [0.6,"abjsdlkfjs"]
-b = [0.8,"sdfsdsdfsd"]
-lis.append(a)
-lis.append(b)
-print(max(lis))
-best.append(max(lis))
-print(best[0])
+lis[0]=5
+print(lis)
+lis[0] = None
+print(lis)
 
-best_prob[1] = best[0]
-print(best_prob)
+
 
 
 

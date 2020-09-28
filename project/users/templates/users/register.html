@@ -1,7 +1,9 @@
 {% extends "service/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <div class="content-section">
+
+<!--    <div class="content-section"> => css가 되면 적용-->
+    <div style="width:700px;margin:auto; padding: 50px 0px 50px 0px">
         <form method="POST">
             {% csrf_token %}
             <fieldset class="form-group">
@@ -16,7 +18,6 @@
             <small class="text-muted">
                 Already Have An Account? <a class="ml-2" href="#">Sign In</a>
             </small>
-            aaaaaaaaaa
         </div>
     </div>
 {% endblock content %}
