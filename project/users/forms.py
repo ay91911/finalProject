@@ -1,11 +1,8 @@
-
 from django import forms
 from django.forms import ModelForm
-from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
-from smile.models import User
+from smile.models import USER
 
-
+'''
 GENDER=[
     ('male', 'Male')
     ('female', 'Female')
@@ -24,12 +21,13 @@ GENDER=[
     ('male', 'Male')
     ('female', 'Female')
 ]
-
+'''
 
 class UserForm(ModelForm):
-    Password = forms.CharField(widget=forms.PasswordInput)
-    Gender = forms.CharField(widget=forms.Select)
+    PASSWORD = forms.CharField(widget=forms.PasswordInput)
+    SEX_CD = forms.CharField(widget=forms.Select)
 
     class Meta:
-        model = User
-        fields = ['Email', 'Password', 'Username', 'Gender', 'Age']
+        model = USER
+        fields = ['EMAIL', 'PASSWORD', 'USER_NM', 'SEX_CD', 'USER_AGE']
+
