@@ -112,24 +112,16 @@ print(s_best_prob[1][1])
 print(s_best_prob[2][1])
 
 
-best_prob = {0:None,
-             1:None,
-             2:None
-             }
 
+data = {0: None,  # level_1
+                      1: None,  # level_2
+                      2: None,  # level_3
 
-best_prob[0] = [0.9, "absdfsjidf"]
-print(best_prob)
-print(best_prob[1] ==None)
+                      }
 
-
-lis =[None]
-lis[0]=5
-print(lis)
-lis[0] = None
-print(lis)
-
-
+print(data[0]==None)
+data[0]=[1,"abc"]
+print(type(data[0]))
 
 
 

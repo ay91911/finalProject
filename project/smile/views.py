@@ -26,6 +26,16 @@ frame_window = 30
 emotion_window = []
 best_prob_level = [None]
 
+def index(request):
+    return render(request, 'smile/index.html')
+
+def index02(request):
+    return render(request, 'smile/index2.html')
+
+def index03(request):
+    return render(request, 'smile/index3.html')
+
+
 
 class VideoCamera_smile:
     global detection_model_path
@@ -253,4 +263,12 @@ def put_text_info(coordinates, image_array, text, color, font_scale=0.9, thickne
     x = x_root - x_pixel
     y = y_root - y_pixel
     cv2.putText(image_array, text, (x, y), cv2.FONT_HERSHEY_SIMPLEX, font_scale, color, thickness)
+
+
+def reset():
+    emotion_image_data[0] = "None"
+    emotion_image_data[1] = "None"
+    emotion_image_data[2] = "None"
+    print(emotion_image_data)
+
 
