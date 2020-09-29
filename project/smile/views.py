@@ -5,6 +5,8 @@ import cv2, time, operator
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import img_to_array
 import numpy as np
+from os.path import split
+import os
 
 from statistics import mode
 
@@ -75,6 +77,7 @@ class VideoCamera_smile:
                 emotion_prediction = self.emotion_classifier.predict(gray_face)[0]
 
                 emotion_probability = np.max(emotion_prediction)
+                emotion_probability = round(emotion_probability*100,2)  #소수둘째자리까지 반올림 ex)90.12
                 emotion_label = np.argmax(emotion_prediction)
                 emotion_text = emotion_labels[emotion_label]  # happy, sad, surprise
                 emotion_window.append(emotion_text)
@@ -129,7 +132,6 @@ class VideoCamera_smile:
                                      (0, 255, 100))
                             success, jpeg = cv2.imencode('.jpg', frame)
 
-                            # imgwrite(best_prob_level,emotion_image_data)
                             imgwrite(best_prob_level, emotion_image_data, level_index)
 
                             self.smile_count = 0
@@ -137,30 +139,6 @@ class VideoCamera_smile:
 
                         else:
                             best_prob_level[0] = None
-
-                        '''
-                        if len(best_prob) < 5:
-                            best_prob[0] = (max(prob_list))
-                            #best_prob[self.save_file_count]= (max(prob_list))
-                            draw_rectangle(face_coordinates, frame, (0, 255, 100))
-                            put_text(face_coordinates, frame, (str(self.smile_count) + ": " + str(emotion_probability)),(0, 255, 100))
-                            success, jpeg = cv2.imencode('.jpg', frame)
-                            self.save_file_count += 1
-
-                        # img write
-
-                        elif len(best_prob) == 5:
-
-                            imgwrite_new()
-                            #imgwrite(self.save_file_count)
-
-
-                        elif len(best_prob) > 5:
-                            best_prob.clear()
-                        '''
-
-
-
 
                 else:
                     self.smile_count = 0
@@ -178,6 +156,7 @@ class VideoCamera_smile:
             success, jpeg = cv2.imencode('.jpg', frame_next)
             return jpeg.tobytes()
 
+#-------------------------------------------------------------------------------------------------------
 
 def video_smile_level1(request):
     try:
@@ -213,7 +192,7 @@ def gen_level(camera, frame_count, level_index=0):
 
 # --------------------------------------------------------------------------
 
-
+'''
 def img_sort(best_prob, rank=3):
     best_prob_sort = sorted(best_prob.items(), key=operator.itemgetter(1), reverse=True)
     best_prob_sort = best_prob_sort[0:rank]  # 랭크몇위입력
@@ -237,18 +216,26 @@ def imgwrite(best_prob_level, emotion_image_data):
     emotion_image_data[0] = best_prob_level
     print(emotion_image_data)
     print(len(emotion_image_data))
-
+'''
 
 def imgwrite(best_prob_level, emotion_image_data, level_index):
     data_prob = best_prob_level[0][0]
     data_img = best_prob_level[0][1]
-    img = cv2.imdecode(data_img, cv2.IMREAD_COLOR)
-    cv2.imwrite('C:/dev/finalProject/aiProject/images/' + 'best_level' + str(level_index + 1) + '.png', img)
 
-    # emotion_image_data[level_index] = best_prob_level
-    emotion_image_data[level_index] = best_prob_level[0]
+    path = 'C:/dev/finalProject/aiProject/images/'
+    img = cv2.imdecode(data_img, cv2.IMREAD_COLOR)
+    cv2.imwrite( path + 'best_level' + str(level_index + 1) + '.png', img)
+
+    dir, file = os.path.split(path + 'best_level' + str(level_index + 1) + '.png')
+    imgPath = dir+file
+
+
+
+
+    emotion_image_data[level_index] = [data_prob,imgPath]    #emotion_image_data에 저장
+
     print(emotion_image_data)
-    print(len(emotion_image_data))
+
 
 
 def draw_rectangle(face_coordinates, image_array, color):
