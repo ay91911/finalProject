@@ -25,9 +25,17 @@ GENDER=[
 
 class UserForm(ModelForm):
     PASSWORD = forms.CharField(widget=forms.PasswordInput)
-    SEX_CD = forms.CharField(widget=forms.Select)
+    SEX_CD = forms.CharField(widget=forms.Select(choices=USER.SEX_CHOICES))
 
     class Meta:
         model = USER
         fields = ['EMAIL', 'PASSWORD', 'USER_NM', 'SEX_CD', 'USER_AGE']
 
+
+class LoginForm(forms.Form):
+    EMAIL = forms.CharField(widget=forms.TextInput)
+    PASSWORD = forms.CharField(widget=forms.PasswordInput)
+
+    # class Meta:
+    #     model = USER
+    #     fields = ['EMAIL', 'PASSWORD']

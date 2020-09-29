@@ -4,7 +4,7 @@ import tensorflow as tf
 from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.models import load_model
 import time,os
-
+from os.path import split
 
 #model path
 model_path01 = 'haarcascade_frontalface_default.xml'
@@ -98,9 +98,30 @@ data = b'\xd8\x0fI@ff\xe6\x01\x00\x00\x00@'
 print(data)
 data = np.frombuffer(data,np.uint8)
 print(data)
+print(type(data))
 img_decode = cv2.imdecode(data,cv2.IMREAD_COLOR)
 print(img_decode)
 
+import operator
+best_prob = {1:[0.9,"a"],2:[0.91,"a"],3:[0.89,"b"],4:[0.78,"c"]}
+
+s_best_prob = sorted(best_prob.items(), key=operator.itemgetter(1),reverse=True)
+print(s_best_prob)
+print(s_best_prob[0][1][1])
+print(s_best_prob[1][1])
+print(s_best_prob[2][1])
+
+
+
+data = {0: None,  # level_1
+                      1: None,  # level_2
+                      2: None,  # level_3
+
+                      }
+
+print(data[0]==None)
+data[0]=[1,"abc"]
+print(type(data[0]))
 
 
 

@@ -32,12 +32,12 @@ class PHRASE(models.Model):
     def __str__(self):
         return self.QUOTE
 
-SEX_CHOICES = [
-    ('M','Male'),
-    ('F','Female'),
-]
 
 class USER(models.Model):
+    SEX_CHOICES = [
+        ('M', 'Male'),
+        ('F', 'Female'),
+    ]
     EMAIL = models.CharField(max_length=100, primary_key=True)
     PASSWORD = models.CharField(max_length=50)
     USER_NM = models.CharField(max_length=20)
