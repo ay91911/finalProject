@@ -87,7 +87,7 @@ footer {
 
 .viewer {
     width: 1200px;
-    height: 800px;
+    height: 600px;
     background-color: black;
     margin-bottom: 100px;
 
@@ -100,7 +100,7 @@ footer {
 
 .b1 {
     background-color: #1abc9c;
-    height: 180px;
+    height: 150px;
     width: 180px;
     border-right: 5px solid black;
 }
@@ -122,21 +122,27 @@ footer {
 
 .c1 {
     background-color: #1abc9c;
-    height: 180px;
+    height: 150px;
     width: 180px;
     border-right: 5px solid black;
 }
 
 .d1 {
     background-color: #1abc9c;
-    height: 180px;
+    height: 150px;
     width: 180px;
     border-right: 5px solid black;
 }
 
 .e1 {
     background-color: #1abc9c;
-    height: 180px;
+    height: 150px;
     width: 180px;
     border-right: 5px solid black;
 }
+
+.btn-group {
+    height: 50px;
+    margin-top : 20px;
+}
+

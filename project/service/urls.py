@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from service import views as service_views
+from smile import views as smile_views
 from django.conf.urls.static import static
 from django.conf import settings
 
@@ -23,6 +24,8 @@ urlpatterns = [
     path('', service_views.mainpage, name='mainpage'),
     path('', service_views.mainpage, name='mainpage'),
     path('', service_views.mainpage, name='mainpage'),
+    path('smile/', service_views.smile_study, name='smile_study'),
+    path('empathy/', service_views.empathy_training, name='empathy_training'),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
