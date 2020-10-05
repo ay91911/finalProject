@@ -6,7 +6,8 @@ def mainpage(request):
 
 
 def smile_study(request):
-    return render(request, 'smile/index.html')
+    #return render(request, 'smile/index.html')
+    return render(request, 'smile/todayPhrase.html')
 
 def empathy_training(request):
     return render(request, 'empathy/training.html')
