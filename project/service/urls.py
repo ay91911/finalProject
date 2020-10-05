@@ -21,6 +21,8 @@ from django.conf import settings
 
 urlpatterns = [
     path('', service_views.mainpage, name='mainpage'),
+    path('', service_views.mainpage, name='mainpage'),
+    path('', service_views.mainpage, name='mainpage'),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
