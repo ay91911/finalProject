@@ -1,3 +1,4 @@
+
 .bg-signiture {
     background-color: #1abc9c;
   }
@@ -98,6 +99,7 @@ footer {
 .a1 {
     height: 100px;
     background-color: black;
+    padding-top: 100px;
 }
 
 .b1 {
@@ -158,17 +160,3 @@ footer {
     height: 120px;
     width: 100%;
 }
-
-.timer {
-    font-weight: bold;
-    font-size: xx-large;
-    color: #1abc9c;
-    text-align: center;
-}
-
-.instr1 {
-    font-weight: bold;
-}
-
-
-
