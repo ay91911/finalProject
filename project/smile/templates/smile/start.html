@@ -18,9 +18,9 @@
                 </div>
             </td>
             <td rowspan="4" class="b3"></td>
-            <td rowspan="5" class="b4" align = "center">
-                <div class="instr1">현재 표정을 촬영합니다.</div>
-                <countdown-time autostart add="4s" format="{s}" class="timer"></countdown-time>
+            <td rowspan="5" class="b4" align="center">
+                <div class="instr1">준비되셨나요?<br>START 버튼을 눌러주세요.</div><br><br>
+                <a class="btn btn-info btn-lg" href="{% url 'index' %}" role="button"><b>START</b></a>
             </td>
         </tr>
         <tr>
@@ -35,9 +35,9 @@
         <tr>
             <td class="f2" colspan="2" height="70" align="center">
               <div class="btn-group" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-secondary">◀</button>
+                <button type="button" class="btn btn-secondary"><</button>
                 <button type="button" class="btn btn-secondary">__________________________________________________________________________________________</button>
-                <a class="btn btn-secondary" href="{% url 'index' %}" role="button">▶</a>
+                <a class="btn btn-secondary" href="{% url 'index' %}" role="button">></a>
               </div>
             </td>
         </tr>
