@@ -32,20 +32,22 @@ best_prob_level = [None]
 
 def index(request):
     if emotion_image_data[0] == None and emotion_image_data[1] == None and emotion_image_data[2] == None and emotion_image_data[3] == None:
-        return render(request, 'smile/index.html')
-    elif emotion_image_data[0] == None and emotion_image_data[1] != None and emotion_image_data[2] == None and emotion_image_data[3] == None:
-        return render(request, 'smile/index2.html')
-    elif emotion_image_data[0] == None and emotion_image_data[1] != None and emotion_image_data[2] != None and emotion_image_data[3] == None:
-        return render(request, 'smile/index3.html')
+        return render(request, 'smile/neutral.html')
+    elif emotion_image_data[0] != None and emotion_image_data[1] == None and emotion_image_data[2] == None and emotion_image_data[3] == None:
+        return render(request, 'smile/smile_1.html')
+    elif emotion_image_data[0] != None and emotion_image_data[1] != None and emotion_image_data[2] == None and emotion_image_data[3] == None:
+        return render(request, 'smile/smile_2.html')
+    elif emotion_image_data[0] != None and emotion_image_data[1] != None and emotion_image_data[2] != None and emotion_image_data[3] == None:
+        return render(request, 'smile/smile_3.html')
 
     else:
         return render(request, 'service/mainpage1.html')
 
 def index02(request):
-    return render(request, 'smile/index2.html')
+    return render(request, 'smile/smile_2.html')
 
 def index03(request):
-    return render(request, 'smile/index3.html')
+    return render(request, 'smile/smile_3.html')
 
 
 
@@ -254,7 +256,7 @@ def video_today_phrase(request):
     except HttpResponseServerError as e:
         print("asborted", e)
 
-def video_non_smile(request):
+def video_neutral(request):
     try:
         return StreamingHttpResponse(gen_non_smile(VideoCamera_smile(), frame_count=15, level_index=0),
                                      content_type="multipart/x-mixed-replace;boundary=frame")
