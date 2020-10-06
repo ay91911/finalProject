@@ -338,7 +338,7 @@ def imgwrite(best_prob_level, emotion_image_data, level_index):
     data_prob = best_prob_level[0][0]
     data_img = best_prob_level[0][1]
 
-    path = 'C:/Users/acorn-508/PycharmProjects/finalProject2/aiProject/images'
+    path = 'C:/dev/finalProject2/aiProject/images'
     img = cv2.imdecode(data_img, cv2.IMREAD_COLOR)
     cv2.imwrite( path + 'best_level' + str(level_index + 1) + '.png', img)
 

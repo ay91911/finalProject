@@ -72,6 +72,7 @@ footer {
 .jumbotron {
     padding: 10px 0px 10px 0px;
     position: relative;
+    box-shadow: inset 150px 0 150px 10px #FFF;
 }
 
 .content-section {
