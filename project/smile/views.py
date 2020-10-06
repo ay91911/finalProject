@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect, get_object_or_404, get_list_or_404
 from django.views.decorators import gzip
 from django.http import StreamingHttpResponse, HttpResponseServerError
 import cv2, time, operator
@@ -7,8 +7,10 @@ from tensorflow.keras.preprocessing.image import img_to_array
 import numpy as np
 from os.path import split
 import os
-
 from statistics import mode
+from smile.models import PHRASE
+
+msg = "Please click the next button"
 
 
 emotion_image_data = {0: None,  # 무표정
@@ -19,6 +21,14 @@ emotion_image_data = {0: None,  # 무표정
                       }
 
 today_emotion_label =[]
+
+def ListPhrase(request,today_emotion_label):
+    # if request.method == 'POST':
+    # emotionPhrase = PHRASE.objects.filter(EMOTION_KIND=0)[0]
+    Phrase_list = get_list_or_404(PHRASE, EMOTION_KIND=today_emotion_label[0])
+    return render(request, 'smile/emotion_detection.html', {'Phrase_list': Phrase_list})
+
+
 
 # model path
 detection_model_path = 'C:/dev/finalProject2/project/smile/detection_models/haarcascade_frontalface_default.xml'
@@ -43,11 +53,6 @@ def index(request):
     else:
         return render(request, 'service/mainpage1.html')
 
-def index02(request):
-    return render(request, 'smile/smile_2.html')
-
-def index03(request):
-    return render(request, 'smile/smile_3.html')
 
 
 
@@ -83,7 +88,9 @@ class VideoCamera_smile:
 
 
     # 오늘의 한마디
-    def today_phrase(self, img_count):
+    def today_phrase(self, img_count, session):
+        self.msg = " test "
+
         while self.emo_label_exist != True:
             success, frame = self.video.read()
             self.gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -119,6 +126,15 @@ class VideoCamera_smile:
                     today_emotion_label.append(mode(self.emotion_label_list))
 
                     print(today_emotion_label)
+
+                    Phrase_list = get_list_or_404(PHRASE, EMOTION_KIND=today_emotion_label[0])[0]
+                    print(Phrase_list)
+                    print(session["loginuser"])
+                    session["aa"] = Phrase_list
+                    print(session["aa"])
+                    self.msg = Phrase_list
+
+
                     success, jpeg = cv2.imencode('.jpg', frame)
                     jpeg_tobytes = jpeg.tobytes()
 
@@ -131,7 +147,7 @@ class VideoCamera_smile:
         success_next, frame_next = self.video.read()
         self.faces = self.cascade.detectMultiScale(self.gray, scaleFactor=1.1, minNeighbors=5)
         for face_coordinates in self.faces:
-            put_text_info(face_coordinates, frame_next, "Please click the next button", (0, 255, 100))
+            put_text_info(face_coordinates, frame_next, self.msg, (0, 255, 100))
             success, jpeg = cv2.imencode('.jpg', frame_next)
             return jpeg.tobytes()
 
@@ -251,7 +267,8 @@ class VideoCamera_smile:
 #-------------------------------------------------------------------------------------------------------
 def video_today_phrase(request):
     try:
-        return StreamingHttpResponse(gen_today_phrase(VideoCamera_smile(), frame_count=25),
+        session = request.session
+        return StreamingHttpResponse(gen_today_phrase(session, VideoCamera_smile(), frame_count=25),
                                      content_type="multipart/x-mixed-replace;boundary=frame")
     except HttpResponseServerError as e:
         print("asborted", e)
@@ -290,9 +307,9 @@ def video_smile_level3(request):
 
 # _______________________________________________________________________
 
-def gen_today_phrase(camera, frame_count):
+def gen_today_phrase(session, camera, frame_count  ):
     while True:
-        frame = camera.today_phrase(frame_count)
+        frame = camera.today_phrase(frame_count ,session)
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
