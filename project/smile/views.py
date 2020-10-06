@@ -78,7 +78,6 @@ class VideoCamera_smile:
         while self.emo_label_exist != True:
             success, frame = self.video.read()
             self.gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            self.rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # 추가코드0924
             self.faces = self.cascade.detectMultiScale(self.gray, scaleFactor=1.1, minNeighbors=5)
 
             for face_coordinates in self.faces:
@@ -97,24 +96,6 @@ class VideoCamera_smile:
                 emotion_text = emotion_labels[emotion_label]  # happy, sad, surprise
                 emotion_window.append(emotion_text)
 
-                if emotion_text == 'happy':
-                    color = emotion_probability * np.asarray((255, 0, 0))
-
-                elif emotion_text == 'angry':
-                    color = emotion_probability * np.asarray((0, 0, 255))
-
-                elif emotion_text == 'sad':
-                    color = emotion_probability * np.asarray((255, 255, 0))
-
-                elif emotion_text == 'neutral':
-                    color = emotion_probability * np.asarray((0, 255, 255))
-
-                else:
-                    color = emotion_probability * np.asarray((0, 255, 0))
-
-                color = color.astype(int)
-                color = color.tolist()
-
                 while self.frame_count < img_count:
                     self.frame_count += 1
                     draw_rectangle(face_coordinates, frame, (0, 255, 100))
@@ -125,28 +106,25 @@ class VideoCamera_smile:
                     return jpeg_tobytes
 
                 while self.frame_count >= img_count:
+
                     today_emotion_label.append(mode(self.emotion_label_list))
 
                     print(today_emotion_label)
-
-                    draw_rectangle(face_coordinates, frame, (0, 255, 100))
-                    put_text(face_coordinates, frame, "completed", (0, 255, 100)),
                     success, jpeg = cv2.imencode('.jpg', frame)
                     jpeg_tobytes = jpeg.tobytes()
 
                     self.frame_count = 0
-                    self.emotion_label_list.clear()
                     self.emo_label_exist = True
+                    self.emotion_label_list.clear()
 
                     return jpeg_tobytes
 
-        success, frame = self.video.read()
-        self.gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        success_next, frame_next = self.video.read()
         self.faces = self.cascade.detectMultiScale(self.gray, scaleFactor=1.1, minNeighbors=5)
-        success, jpeg = cv2.imencode('.jpg', frame)
-        jpeg_tobytes = jpeg.tobytes()
-        self.emotion_label_list.append(emotion_label)
-        return jpeg_tobytes
+        for face_coordinates in self.faces:
+            put_text_info(face_coordinates, frame_next, "Please click the next button", (0, 255, 100))
+            success, jpeg = cv2.imencode('.jpg', frame_next)
+            return jpeg.tobytes()
 
     def get_frame(self, img_count, level_index):
         global emotion_image_data
@@ -371,10 +349,18 @@ def put_text_info(coordinates, image_array, text, color, font_scale=0.9, thickne
     cv2.putText(image_array, text, (x, y), cv2.FONT_HERSHEY_SIMPLEX, font_scale, color, thickness)
 
 
+def get_today_phrase():
+    return today_emotion_label
+
+def reset_today_phrase():
+    today_emotion_label.clear()
+
+
+
 def reset():
     emotion_image_data[0] = "None"
     emotion_image_data[1] = "None"
     emotion_image_data[2] = "None"
-    print(emotion_image_data)
+
 
 
