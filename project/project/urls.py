@@ -24,6 +24,7 @@ urlpatterns = [
     path('register', user_views.register, name='register'),
     path('mainpage/', include('service.urls')),
     path('smile/', include('smile.urls')),
+    path('empathy/', include('empathy.urls')),
     path('', include('users.urls')),
 ]
 
