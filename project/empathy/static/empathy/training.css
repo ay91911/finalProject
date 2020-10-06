@@ -1,3 +1,4 @@
+
 .bg-signiture {
     background-color: #1abc9c;
   }
@@ -98,6 +99,7 @@ footer {
 .a1 {
     height: 100px;
     background-color: black;
+    padding-top: 100px;
 }
 
 .b1 {
