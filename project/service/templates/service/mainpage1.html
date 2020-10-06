@@ -1,6 +1,7 @@
 {% extends "service/base.html" %}
 {% block content %}
-<div class="jumbotron">
+<div class="totalcontents">
+    <div class="jumbotron">
       <h2 class="display-4">GAMSUNG PAL-EE</h2>
       <h2 class="lead">가상환경 언택트 시대<br>진보된 업무환경 효율성을 위한<br>AI 감성공감 서비스</h2>
       <hr class="my-4">
@@ -57,7 +58,6 @@
         </tr>
       </table>
     </div>
-
     <table width = "1200" height = "350" align = "center"  bgcolor = "white" >
       <tr class = "table2" align = "center ">
         <td><h1><b>스마일 학습 트레이닝</b></h1></td>
@@ -72,4 +72,5 @@
         <td class = "button1"><a class="btn btn-warning" href="{% url 'smile_study' %}" role="button">지금 바로 시작하기</a></td>
       </tr>
     </table>
+</div>
 {% endblock content %}
