@@ -10,9 +10,11 @@ import os
 
 from statistics import mode
 
-emotion_image_data = {0: None,  # level_1
-                      1: None,  # level_2
-                      2: None,  # level_3
+
+emotion_image_data = {0: None,  # 무표정
+                      1: None,  # level_1
+                      2: None,  # level_2
+                      3: None,  # level_3
 
                       }
 
@@ -37,9 +39,6 @@ def index02(request):
 def index03(request):
     return render(request, 'smile/index3.html')
 
-
-
-#20201006
 
 
 
@@ -126,7 +125,7 @@ class VideoCamera_smile:
             success, jpeg = cv2.imencode('.jpg', frame_next)
             return jpeg.tobytes()
 
-    def get_frame(self, img_count, level_index):
+    def get_frame(self, img_count, level_index, emotion='happy'):
         global emotion_image_data
 
         # 학습후 저장된 데이터가 없으면!
@@ -178,7 +177,7 @@ class VideoCamera_smile:
                 color = color.astype(int)
                 color = color.tolist()
 
-                if emotion_text == 'happy':
+                if emotion_text == emotion:
                     while self.smile_count < img_count:  # 30
                         self.smile_count += 1
 
@@ -235,6 +234,10 @@ class VideoCamera_smile:
             success, jpeg = cv2.imencode('.jpg', frame_next)
             return jpeg.tobytes()
 
+
+
+
+
 #-------------------------------------------------------------------------------------------------------
 def video_today_phrase(request):
     try:
@@ -243,10 +246,18 @@ def video_today_phrase(request):
     except HttpResponseServerError as e:
         print("asborted", e)
 
+def video_non_smile(request):
+    try:
+        return StreamingHttpResponse(gen_non_smile(VideoCamera_smile(), frame_count=15, level_index=0),
+                                     content_type="multipart/x-mixed-replace;boundary=frame")
+    except HttpResponseServerError as e:
+        print("asborted", e)
+
+
 
 def video_smile_level1(request):
     try:
-        return StreamingHttpResponse(gen_level(VideoCamera_smile(), frame_count=10, level_index=0),
+        return StreamingHttpResponse(gen_level(VideoCamera_smile(), frame_count=10, level_index=1),
                                      content_type="multipart/x-mixed-replace;boundary=frame")
     except HttpResponseServerError as e:
         print("asborted", e)
@@ -254,7 +265,7 @@ def video_smile_level1(request):
 
 def video_smile_level2(request):
     try:
-        return StreamingHttpResponse(gen_level(VideoCamera_smile(), frame_count=20, level_index=1),
+        return StreamingHttpResponse(gen_level(VideoCamera_smile(), frame_count=20, level_index=2),
                                      content_type="multipart/x-mixed-replace;boundary=frame")
     except HttpResponseServerError as e:
         print("asborted", e)
@@ -262,7 +273,7 @@ def video_smile_level2(request):
 
 def video_smile_level3(request):
     try:
-        return StreamingHttpResponse(gen_level(VideoCamera_smile(), frame_count=30, level_index=2),content_type="multipart/x-mixed-replace;boundary=frame")
+        return StreamingHttpResponse(gen_level(VideoCamera_smile(), frame_count=30, level_index=3),content_type="multipart/x-mixed-replace;boundary=frame")
     except HttpResponseServerError as e:
         print("asborted", e)
 
@@ -276,10 +287,17 @@ def gen_today_phrase(camera, frame_count):
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
 
-
-def gen_level(camera, frame_count, level_index=0):
+def gen_non_smile(camera,frame_count, level_index=0):
     while True:
-        frame = camera.get_frame(frame_count, level_index)
+        frame = camera.get_frame(frame_count, level_index, 'neutral')
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+
+
+
+def gen_level(camera, frame_count, level_index=1):
+    while True:
+        frame = camera.get_frame(frame_count, level_index, 'happy')
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
