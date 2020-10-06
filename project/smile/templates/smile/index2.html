@@ -2,13 +2,44 @@
 {% block content %}
 <body>
 
-<div id =video01>
-    <div>
-        <h1>videoStreaming_LEVEL2</h1>
-        <img src="{% url 'video_smile_level2' %}">
+ <table class="viewer" align = "center">
+        <tr>
+            <td colspan="4" class="a1"><h2 class="title2">스마일 학습</h2></td>
+        </tr>
+        <tr>
+            <td class="b1"></td>
+            <td rowspan="4" class="b2">
+                <div id =video01>
+                     <div>
+                        <h1>videoStreaming_LEVEL2</h1>
+                        <img src="{% url 'video_smile_level2' %}" width="auto" height="400">
 
-    </div>
-</div>
+                     </div>
+                </div>
+            </td>
+            <td rowspan="4" class="b3"></td>
+            <td rowspan="5" class="b4"></td>
+        </tr>
+        <tr>
+            <td class="c1"></td>
+        </tr>
+        <tr>
+            <td class="d1"></td>
+        </tr>
+        <tr>
+            <td class="e1"></td>
+        </tr>
+        <tr>
+            <td class="f2" colspan="2" height="70" align="center">
+              <div class="btn-group" role="group" aria-label="Basic example">
+                <button type="button" class="btn btn-secondary"><</button>
+                <button type="button" class="btn btn-secondary">__________________________________________________________________________________________</button>
+                <button type="button" class="btn btn-secondary">></button>
+              </div>
+            </td>
+        </tr>
+    </table>
+
 
 
 </body>

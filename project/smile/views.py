@@ -31,7 +31,15 @@ emotion_window = []
 best_prob_level = [None]
 
 def index(request):
-    return render(request, 'smile/index.html')
+    if emotion_image_data[0] == None and emotion_image_data[1] == None and emotion_image_data[2] == None and emotion_image_data[3] == None:
+        return render(request, 'smile/index.html')
+    elif emotion_image_data[0] == None and emotion_image_data[1] != None and emotion_image_data[2] == None and emotion_image_data[3] == None:
+        return render(request, 'smile/index2.html')
+    elif emotion_image_data[0] == None and emotion_image_data[1] != None and emotion_image_data[2] != None and emotion_image_data[3] == None:
+        return render(request, 'smile/index3.html')
+
+    else:
+        return render(request, 'service/mainpage1.html')
 
 def index02(request):
     return render(request, 'smile/index2.html')
