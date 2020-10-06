@@ -8,6 +8,7 @@ import numpy as np
 from os.path import split
 import os
 
+print( os.getcwd() ) #현재 경로
 from statistics import mode
 
 emotion_image_data = {0: None,  # level_1
@@ -17,8 +18,8 @@ emotion_image_data = {0: None,  # level_1
                       }
 
 # model path
-detection_model_path = 'C:/dev/finalProject/project/smile/detection_models/haarcascade_frontalface_default.xml'
-emotion_model_path = 'C:/dev/finalProject\project\smile\emotion_models\_vgg16_01_.34-0.77-0.6478.h5'
+detection_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/detection_models/haarcascade_frontalface_default.xml'
+emotion_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
 emotion_labels = ["happy", "angry", "sad", "neutral", "surprise"]
 
 # initialization
@@ -232,7 +233,7 @@ def imgwrite(best_prob_level, emotion_image_data, level_index):
     data_prob = best_prob_level[0][0]
     data_img = best_prob_level[0][1]
 
-    path = 'C:/dev/finalProject/aiProject/images/'
+    path = 'C:/Users/acorn-508/PycharmProjects/finalProject/aiProject/images'
     img = cv2.imdecode(data_img, cv2.IMREAD_COLOR)
     cv2.imwrite( path + 'best_level' + str(level_index + 1) + '.png', img)
 
