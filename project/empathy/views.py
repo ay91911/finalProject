@@ -27,13 +27,13 @@ emotion_window = []
 best_prob_level = [None]
 
 def index(request):
-    return render(request, 'smile/index.html')
+    return render(request, 'smile/smile_1.html')
 
 def index02(request):
-    return render(request, 'smile/index2.html')
+    return render(request, 'smile/smile_2.html')
 
 def index03(request):
-    return render(request, 'smile/index3.html')
+    return render(request, 'smile/smile_3.html')
 
 
 
