@@ -21,7 +21,7 @@ emotion_image_data = {0: None,  # 무표정
                       }
 phraseList =[]
 
-
+#
 # model path
 #대윤
 # detection_model_path = 'C:/dev/finalProject2/project/smile/detection_models/haarcascade_frontalface_default.xml'
