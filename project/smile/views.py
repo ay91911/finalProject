@@ -21,13 +21,6 @@ emotion_image_data = {0: None,  # 무표정
                       }
 phraseList =[]
 
-def ListPhrase(request):
-    #context = {'phraseList':phraseList}
-    context ={'phraseList':phraseList}
-    print(context)
-    return render(request, 'smile/emotion_detection_2.html',context)
-
-
 # model path
 #대윤
 detection_model_path = 'C:/dev/finalProject2/project/smile/detection_models/haarcascade_frontalface_default.xml'
@@ -63,6 +56,11 @@ def index(request):
         return render(request, 'service/mainpage1.html')
 
 
+def ListPhrase(request):
+    #context = {'phraseList':phraseList}
+    context ={'phraseList':phraseList}
+    print(context)
+    return render(request, 'smile/emotion_detection_2.html',context)
 
 
 
@@ -99,7 +97,6 @@ class VideoCamera_smile:
 
     # 오늘의 한마디
     def today_phrase(self, img_count):
-
         while self.emo_label_exist != True:
             success, frame = self.video.read()
             self.gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -136,13 +133,15 @@ class VideoCamera_smile:
 
                     print(self.today_emotion_label)
 
+                    #오늘의 한마디 가져오기
                     Phrase_list = get_list_or_404(PHRASE, EMOTION_KIND=self.today_emotion_label[0])[0]
-                    print(Phrase_list)
+
+                    print(type(Phrase_list))
+
+
+
                     phraseList.append(Phrase_list)
-
-
-
-
+                    print(phraseList)
                     #print(session["loginuser"])
                     #session["aa"] = Phrase_list
                     #print(session["aa"])
@@ -158,7 +157,7 @@ class VideoCamera_smile:
 
                     return jpeg_tobytes
 
-        print(phraseList)
+        # print(phraseList)
 
         success_next, frame_next = self.video.read()
         self.faces = self.cascade.detectMultiScale(self.gray, scaleFactor=1.1, minNeighbors=5)
