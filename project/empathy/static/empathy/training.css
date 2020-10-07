@@ -160,3 +160,18 @@ footer {
     height: 120px;
     width: 100%;
 }
+
+
+.timer {
+    font-weight: bold;
+    font-size: xx-large;
+    color: #1abc9c;
+    text-align: center;
+}
+
+countdown-time {
+    font-weight: bold;
+    font-size: xx-large;
+    color: #1abc9c;
+    text-align: center;
+}
