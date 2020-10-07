@@ -11,32 +11,29 @@
                 <div id =video01>
                      <div>
 <!--                        <h1>videoStreaming_LEVEL1</h1>-->
-                        <img src="{% url 'video_smile_level1' %}" width="640" height="auto">
+                         <table bgcolor="black" width="auto" height="400"></table>
                      </div>
                 </div>
             </td>
             <td class="b3"></td>
             <td class="b4" rowspan="2" align="center">
+                <h3 style="color:#1abc9c";><b>트레이닝 결과</b></h3><br><br>
 <pre>
-<h8>
-슬픔 관련 시나리오 작성 필요
+<h8>다시 학습하고 싶으시면 'RESTART'버튼을,
 
-~~~~~
-
-~~~~~~
-
-자! 준비되셨으면 'START'버튼을 눌러주세요!
-</h8>
+오늘 학습을 끝내시려면 'END'버튼을 눌러주세요!</h8>
 </pre>
-                <button type="button" class="btn btn-info btn-lg">START</button>
+                <a class="btn btn-info btn-lg" href="{% url 'training2' %}" role="button">RESTART</a>
+                &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a class="btn btn-info btn-lg" href="{% url 'mainpage' %}" role="button">END</a>
             </td>
         </tr>
         <tr>
             <td class="f2" height="70" align="center">
               <div class="btn-group" role="group" aria-label="Basic example">
-                <a class="btn btn-secondary" href="{% url 'training1' %}" role="button">◀</a>
+                <button type="button" class="btn btn-secondary"></button>
                 <button type="button" class="btn btn-secondary">________________________________________________________________________________</button>
-                <a class="btn btn-secondary" href="{% url 'training3' %}" role="button">▶</a>
+                <button type="button" class="btn btn-secondary"></button>
               </div>
             </td>
         </tr>
