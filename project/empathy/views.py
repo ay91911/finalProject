@@ -9,12 +9,12 @@ from os.path import split
 import os
 
 from statistics import mode
-
-emotion_image_data = {0: None,  # level_1
-                      1: None,  # level_2
-                      2: None,  # level_3
-
-                      }
+#
+# emotion_image_data = {0: None,  # level_1
+#                       1: None,  # level_2
+#                       2: None,  # level_3
+#
+#                       }
 #
 # model path
 #대윤
@@ -48,6 +48,9 @@ def training3(request):
 def training4(request):
     return render(request, 'empathy/training_4.html')
 
+def training5(request):
+    return render(request, 'empathy/training_5.html')
+
 def training_result(request):
     return render(request, 'empathy/training_result.html')
 
@@ -55,17 +58,41 @@ def mainpage(request):
     return render(request, 'service/mainpage1.html')
 
 
-def index(request):
-    return render(request, 'smile/smile_1.html')
+# _______________________________________________________________________
 
-def index02(request):
-    return render(request, 'smile/smile_2.html')
+def happy_training(request):
+    try:
+        time.sleep(5)
+        return StreamingHttpResponse(gen_level(VideoCamera_smile(), frame_count=10, emotion='happy'),
+                                     content_type="multipart/x-mixed-replace;boundary=frame")
+    except HttpResponseServerError as e:
+        print("asborted", e)
 
-def index03(request):
-    return render(request, 'smile/smile_3.html')
+
+def angry_training(request):
+    try:
+        time.sleep(5)
+        return StreamingHttpResponse(gen_level(VideoCamera_smile(), frame_count=10, emotion='angry'),
+                                     content_type="multipart/x-mixed-replace;boundary=frame")
+    except HttpResponseServerError as e:
+        print("asborted", e)
 
 
+def sad_training(request):
+    try:
+        time.sleep(5)
+        return StreamingHttpResponse(gen_level(VideoCamera_smile(), frame_count=10, emotion='sad'),content_type="multipart/x-mixed-replace;boundary=frame")
+    except HttpResponseServerError as e:
+        print("asborted", e)
 
+def surprise_training(request):
+    try:
+        time.sleep(5)
+        return StreamingHttpResponse(gen_level(VideoCamera_smile(), frame_count=10, emotion='surprise'),content_type="multipart/x-mixed-replace;boundary=frame")
+    except HttpResponseServerError as e:
+        print("asborted", e)
+
+# _______________________________________________________________________
 class VideoCamera_smile:
     global detection_model_path
     global emotion_model_path
@@ -83,22 +110,18 @@ class VideoCamera_smile:
         self.smile_count = 0
         self.save_file_count = 0
         self.smile_data = {}  # {count:percent}
+        self.trainIsDone = False
 
     def __del__(self):
         self.video.release()
         # self.save_file_count
 
-    def get_frame_new(self, img_count, level_index):
+    def training_frame(self, img_count, emotion):
         global emotion_image_data
 
-        # 학습후 저장된 데이터가 없으면!
-        # while len(emotion_image_data) == 0:
-        # while emotion_image_data[0] == None:
-        while emotion_image_data[level_index] == None:
-
+        # while emotion_image_data[level_index] == None:
+        while self.trainIsDone != True:
             success, frame = self.video.read()
-            success_saved, frame_saved = self.video.read()
-            success_next, frame_next = self.video.read()
 
             self.gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             self.rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # 추가코드0924
@@ -121,141 +144,55 @@ class VideoCamera_smile:
                 emotion_text = emotion_labels[emotion_label]  # happy, sad, surprise
                 emotion_window.append(emotion_text)
 
-                if emotion_text == 'happy':
-                    color = emotion_probability * np.asarray((255, 0, 0))
-
-                elif emotion_text == 'angry':
-                    color = emotion_probability * np.asarray((0, 0, 255))
-
-                elif emotion_text == 'sad':
-                    color = emotion_probability * np.asarray((255, 255, 0))
-
-                elif emotion_text == 'neutral':
-                    color = emotion_probability * np.asarray((0, 255, 255))
-
-                else:
-                    color = emotion_probability * np.asarray((0, 255, 0))
-
-                color = color.astype(int)
-                color = color.tolist()
-
-                if emotion_text == 'happy':
+                if emotion_text == emotion:
                     while self.smile_count < img_count:  # 30
                         self.smile_count += 1
 
                         draw_rectangle(face_coordinates, frame, (0, 255, 100))
-                        put_text(face_coordinates, frame, (str(self.smile_count) + ": " + str(emotion_probability)),
+                        put_text(face_coordinates, frame, (str(self.smile_count)),
                                  (0, 255, 100))
                         success, jpeg = cv2.imencode('.jpg', frame)
                         jpeg_tobytes = jpeg.tobytes()
-
-                        success_saved, jpeg_saved = cv2.imencode('.jpg', frame_saved)
+                        # success_saved, jpeg_saved = cv2.imencode('.jpg', frame_saved)
 
                         # smile percent
-                        emotion_probability
-                        self.smile_data[self.smile_count] = [emotion_probability, jpeg_saved]  # dictionary
+                        # emotion_probability
+                        # self.smile_data[self.smile_count] = [emotion_probability, jpeg_saved]  # dictionary
 
                         return jpeg_tobytes
 
-                    while self.smile_count >= img_count and self.smile_count % img_count == 0:
 
-                        prob_list = []
-                        for keys, values in self.smile_data.items():
-                            prob_list.append(values)  # values = [prob, img]
-
-                        if best_prob_level[0] == None:
-
-                            best_prob_level[0] = max(prob_list)  # [[prob, img]]
-                            draw_rectangle(face_coordinates, frame, (0, 255, 100))
-                            put_text(face_coordinates, frame, (str(self.smile_count) + ": " + str(emotion_probability)),
-                                     (0, 255, 100))
-                            success, jpeg = cv2.imencode('.jpg', frame)
-
-                            imgwrite(best_prob_level, emotion_image_data, level_index)
-
-                            self.smile_count = 0
-
-
-                        else:
-                            best_prob_level[0] = None
-
+                    self.trainIsDone = True
+                    # put_text_info(face_coordinates, frame, "Very well!! Please click the next button",
+                    #               (0, 255, 100))
+                    # success, jpeg = cv2.imencode('.jpg', frame)
+                    # return jpeg.tobytes()
+                    #
                 else:
                     self.smile_count = 0
 
             success, jpeg = cv2.imencode('.jpg', frame)
             return jpeg.tobytes()
 
-        # 데이터가 저장되어 있으면
-
         success_next, frame_next = self.video.read()
         # success_saved, frame_saved = self.video.read()
         self.faces = self.cascade.detectMultiScale(self.gray, scaleFactor=1.1, minNeighbors=5)
         for face_coordinates in self.faces:
-            put_text_info(face_coordinates, frame_next, "Please click the next button", (0, 255, 100))
+            put_text_info(face_coordinates, frame_next, "Very well!! Please click the next button", (0, 255, 100))
             success, jpeg = cv2.imencode('.jpg', frame_next)
             return jpeg.tobytes()
 
 #-------------------------------------------------------------------------------------------------------
 
-def video_smile_level1(request):
-    try:
-        return StreamingHttpResponse(gen_level(VideoCamera_smile(), frame_count=10, level_index=0),
-                                     content_type="multipart/x-mixed-replace;boundary=frame")
-    except HttpResponseServerError as e:
-        print("asborted", e)
 
-
-def video_smile_level2(request):
-    try:
-        return StreamingHttpResponse(gen_level(VideoCamera_smile(), frame_count=20, level_index=1),
-                                     content_type="multipart/x-mixed-replace;boundary=frame")
-    except HttpResponseServerError as e:
-        print("asborted", e)
-
-
-def video_smile_level3(request):
-    try:
-        return StreamingHttpResponse(gen_level(VideoCamera_smile(), frame_count=30, level_index=2),content_type="multipart/x-mixed-replace;boundary=frame")
-    except HttpResponseServerError as e:
-        print("asborted", e)
-
-
-# _______________________________________________________________________
-
-def gen_level(camera, frame_count, level_index=0):
+def gen_level(camera, frame_count,emotion):
     while True:
-        frame = camera.get_frame(frame_count, level_index)
+        frame = camera.training_frame(frame_count,emotion)
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
 
 # --------------------------------------------------------------------------
-
-'''
-def img_sort(best_prob, rank=3):
-    best_prob_sort = sorted(best_prob.items(), key=operator.itemgetter(1), reverse=True)
-    best_prob_sort = best_prob_sort[0:rank]  # 랭크몇위입력
-
-    return best_prob_sort
-
-
-def imgwrite_new(rank=3):
-    best_prob_sort = img_sort(best_prob_level)
-    for i in range(rank):
-        data_rank = best_prob_sort[i][1][1]
-        img = cv2.imdecode(data_rank, cv2.IMREAD_COLOR)
-        cv2.imwrite('C:/dev/finalProject/aiProject/' + str(i) + '.png', img)
-
-
-def imgwrite(best_prob_level, emotion_image_data):
-    data_img = best_prob_level[0][1]
-    img = cv2.imdecode(data_img, cv2.IMREAD_COLOR)
-    cv2.imwrite('C:/dev/finalProject/aiProject/' + 'best_level' + str(0 + 1) + '.png', img)
-
-    emotion_image_data[0] = best_prob_level
-    print(emotion_image_data)
-    print(len(emotion_image_data))
-'''
 
 def imgwrite(best_prob_level, emotion_image_data, level_index):
     data_prob = best_prob_level[0][0]
