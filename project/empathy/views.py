@@ -26,14 +26,29 @@ frame_window = 30
 emotion_window = []
 best_prob_level = [None]
 
+
+def training1(request):
+    return render(request, 'empathy/training.html')
+
+def training2(request):
+    return render(request, 'empathy/training_2.html')
+
+def training3(request):
+    return render(request, 'empathy/training_3.html')
+
+def training4(request):
+    return render(request, 'empathy/training_4.html')
+
+
+
 def index(request):
-    return render(request, 'smile/index.html')
+    return render(request, 'smile/smile_1.html')
 
 def index02(request):
-    return render(request, 'smile/index2.html')
+    return render(request, 'smile/smile_2.html')
 
 def index03(request):
-    return render(request, 'smile/index3.html')
+    return render(request, 'smile/smile_3.html')
 
 
 

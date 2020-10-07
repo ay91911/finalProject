@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect, get_object_or_404, get_list_or_404
 from django.views.decorators import gzip
 from django.http import StreamingHttpResponse, HttpResponseServerError
 import cv2, time, operator
@@ -7,18 +7,32 @@ from tensorflow.keras.preprocessing.image import img_to_array
 import numpy as np
 from os.path import split
 import os
-
 from statistics import mode
+from smile.models import PHRASE
 
-emotion_image_data = {0: None,  # level_1
-                      1: None,  # level_2
-                      2: None,  # level_3
+msg = "Please click the next button"
+
+
+emotion_image_data = {0: None,  # 무표정
+                      1: None,  # level_1
+                      2: None,  # level_2
+                      3: None,  # level_3
 
                       }
 
+today_emotion_label =[]
+
+def ListPhrase(request,today_emotion_label):
+    # if request.method == 'POST':
+    # emotionPhrase = PHRASE.objects.filter(EMOTION_KIND=0)[0]
+    Phrase_list = get_list_or_404(PHRASE, EMOTION_KIND=today_emotion_label[0])
+    return render(request, 'smile/emotion_detection.html', {'Phrase_list': Phrase_list})
+
+
+
 # model path
-detection_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject2/project/smile/detection_models/haarcascade_frontalface_default.xml'
-emotion_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject2/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
+detection_model_path = 'C:/dev/finalProject2/project/smile/detection_models/haarcascade_frontalface_default.xml'
+emotion_model_path = 'C:/dev/finalProject2/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
 emotion_labels = ["happy", "angry", "sad", "neutral", "surprise"]
 
 # initialization
@@ -27,13 +41,19 @@ emotion_window = []
 best_prob_level = [None]
 
 def index(request):
-    return render(request, 'smile/index.html')
+    if emotion_image_data[0] == None and emotion_image_data[1] == None and emotion_image_data[2] == None and emotion_image_data[3] == None:
+        return render(request, 'smile/neutral.html')
+    elif emotion_image_data[0] != None and emotion_image_data[1] == None and emotion_image_data[2] == None and emotion_image_data[3] == None:
+        return render(request, 'smile/smile_1.html')
+    elif emotion_image_data[0] != None and emotion_image_data[1] != None and emotion_image_data[2] == None and emotion_image_data[3] == None:
+        return render(request, 'smile/smile_2.html')
+    elif emotion_image_data[0] != None and emotion_image_data[1] != None and emotion_image_data[2] != None and emotion_image_data[3] == None:
+        return render(request, 'smile/smile_3.html')
 
-def index02(request):
-    return render(request, 'smile/index2.html')
+    else:
+        return render(request, 'service/mainpage1.html')
 
-def index03(request):
-    return render(request, 'smile/index3.html')
+
 
 
 
@@ -45,6 +65,8 @@ class VideoCamera_smile:
     global emotion_window
     global best_prob_level
     global emotion_image_data
+    global today_emotion_label
+
 
     def __init__(self):
         self.video = cv2.VideoCapture(0)
@@ -53,19 +75,90 @@ class VideoCamera_smile:
         self.emotion_target_size = self.emotion_classifier.input_shape[1:3]  # emotion_target_size = (48,48)
         self.smile_count = 0
         self.save_file_count = 0
+
         self.smile_data = {}  # {count:percent}
+        self.emotion_label_list =[]
+        self.emo_label_exist = False
+        self.emo_image_exist = False
+        self.frame_count = 0
 
     def __del__(self):
         self.video.release()
         # self.save_file_count
 
-    def get_frame(self, img_count, level_index):
+
+    # 오늘의 한마디
+    def today_phrase(self, img_count, session):
+        self.msg = " test "
+
+        while self.emo_label_exist != True:
+            success, frame = self.video.read()
+            self.gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            self.faces = self.cascade.detectMultiScale(self.gray, scaleFactor=1.1, minNeighbors=5)
+
+            for face_coordinates in self.faces:
+                gray_face = self.gray[face_coordinates[1]:face_coordinates[1] + face_coordinates[3],
+                            face_coordinates[0]:face_coordinates[0] + face_coordinates[2]]
+                gray_face = cv2.resize(gray_face, (48, 48))
+                gray_face = gray_face.astype("float") / 255.0
+                gray_face = img_to_array(gray_face)
+                gray_face = np.expand_dims(gray_face, axis=0)  # (48,48,1)
+
+                emotion_prediction = self.emotion_classifier.predict(gray_face)[0]
+
+                emotion_probability = np.max(emotion_prediction)
+                emotion_probability = round(emotion_probability * 100, 2)  # 소수둘째자리까지 반올림 ex)90.12
+                emotion_label = np.argmax(emotion_prediction)
+                emotion_text = emotion_labels[emotion_label]  # happy, sad, surprise
+                emotion_window.append(emotion_text)
+
+                while self.frame_count < img_count:
+                    self.frame_count += 1
+                    draw_rectangle(face_coordinates, frame, (0, 255, 100))
+                    put_text(face_coordinates, frame, "checking", (0, 255, 100)),
+                    success, jpeg = cv2.imencode('.jpg', frame)
+                    jpeg_tobytes = jpeg.tobytes()
+                    self.emotion_label_list.append(emotion_label)
+                    return jpeg_tobytes
+
+                while self.frame_count >= img_count:
+
+                    today_emotion_label.append(mode(self.emotion_label_list))
+
+                    print(today_emotion_label)
+
+                    Phrase_list = get_list_or_404(PHRASE, EMOTION_KIND=today_emotion_label[0])[0]
+                    print(Phrase_list)
+                    print(session["loginuser"])
+                    session["aa"] = Phrase_list
+                    print(session["aa"])
+                    self.msg = Phrase_list
+
+
+                    success, jpeg = cv2.imencode('.jpg', frame)
+                    jpeg_tobytes = jpeg.tobytes()
+
+                    self.frame_count = 0
+                    self.emo_label_exist = True
+                    self.emotion_label_list.clear()
+
+                    return jpeg_tobytes
+
+        success_next, frame_next = self.video.read()
+        self.faces = self.cascade.detectMultiScale(self.gray, scaleFactor=1.1, minNeighbors=5)
+        for face_coordinates in self.faces:
+            put_text_info(face_coordinates, frame_next, self.msg, (0, 255, 100))
+            success, jpeg = cv2.imencode('.jpg', frame_next)
+            return jpeg.tobytes()
+
+    def get_frame(self, img_count, level_index, emotion='happy'):
         global emotion_image_data
 
         # 학습후 저장된 데이터가 없으면!
         # while len(emotion_image_data) == 0:
         # while emotion_image_data[0] == None:
-        while emotion_image_data[level_index] == None:
+        #while emotion_image_data[level_index] == None:
+        while self.emo_image_exist != True:
 
             success, frame = self.video.read()
             success_saved, frame_saved = self.video.read()
@@ -110,7 +203,7 @@ class VideoCamera_smile:
                 color = color.astype(int)
                 color = color.tolist()
 
-                if emotion_text == 'happy':
+                if emotion_text == emotion:
                     while self.smile_count < img_count:  # 30
                         self.smile_count += 1
 
@@ -134,21 +227,23 @@ class VideoCamera_smile:
                         for keys, values in self.smile_data.items():
                             prob_list.append(values)  # values = [prob, img]
 
-                        if best_prob_level[0] == None:
+                        # if best_prob_level[0] == None:
 
-                            best_prob_level[0] = max(prob_list)  # [[prob, img]]
-                            draw_rectangle(face_coordinates, frame, (0, 255, 100))
-                            put_text(face_coordinates, frame, (str(self.smile_count) + ": " + str(emotion_probability)),
-                                     (0, 255, 100))
-                            success, jpeg = cv2.imencode('.jpg', frame)
+                        best_prob_level[0] = max(prob_list)  # [[prob, img]]
+                        draw_rectangle(face_coordinates, frame, (0, 255, 100))
+                        put_text(face_coordinates, frame, (str(self.smile_count) + ": " + str(emotion_probability)),
+                                 (0, 255, 100))
+                        success, jpeg = cv2.imencode('.jpg', frame)
 
-                            imgwrite(best_prob_level, emotion_image_data, level_index)
+                        imgwrite(best_prob_level, emotion_image_data, level_index)
 
-                            self.smile_count = 0
+                        self.smile_count = 0
+                        self.emo_image_exist = True
+
+                        # else:
+                        #     best_prob_level[0] = None
 
 
-                        else:
-                            best_prob_level[0] = None
 
                 else:
                     self.smile_count = 0
@@ -159,18 +254,37 @@ class VideoCamera_smile:
         # 데이터가 저장되어 있으면
 
         success_next, frame_next = self.video.read()
-        # success_saved, frame_saved = self.video.read()
         self.faces = self.cascade.detectMultiScale(self.gray, scaleFactor=1.1, minNeighbors=5)
         for face_coordinates in self.faces:
             put_text_info(face_coordinates, frame_next, "Please click the next button", (0, 255, 100))
             success, jpeg = cv2.imencode('.jpg', frame_next)
             return jpeg.tobytes()
 
+
+
+
+
 #-------------------------------------------------------------------------------------------------------
+def video_today_phrase(request):
+    try:
+        session = request.session
+        return StreamingHttpResponse(gen_today_phrase(session, VideoCamera_smile(), frame_count=25),
+                                     content_type="multipart/x-mixed-replace;boundary=frame")
+    except HttpResponseServerError as e:
+        print("asborted", e)
+
+def video_neutral(request):
+    try:
+        return StreamingHttpResponse(gen_non_smile(VideoCamera_smile(), frame_count=15, level_index=0),
+                                     content_type="multipart/x-mixed-replace;boundary=frame")
+    except HttpResponseServerError as e:
+        print("asborted", e)
+
+
 
 def video_smile_level1(request):
     try:
-        return StreamingHttpResponse(gen_level(VideoCamera_smile(), frame_count=10, level_index=0),
+        return StreamingHttpResponse(gen_level(VideoCamera_smile(), frame_count=10, level_index=1),
                                      content_type="multipart/x-mixed-replace;boundary=frame")
     except HttpResponseServerError as e:
         print("asborted", e)
@@ -178,7 +292,7 @@ def video_smile_level1(request):
 
 def video_smile_level2(request):
     try:
-        return StreamingHttpResponse(gen_level(VideoCamera_smile(), frame_count=20, level_index=1),
+        return StreamingHttpResponse(gen_level(VideoCamera_smile(), frame_count=20, level_index=2),
                                      content_type="multipart/x-mixed-replace;boundary=frame")
     except HttpResponseServerError as e:
         print("asborted", e)
@@ -186,16 +300,31 @@ def video_smile_level2(request):
 
 def video_smile_level3(request):
     try:
-        return StreamingHttpResponse(gen_level(VideoCamera_smile(), frame_count=30, level_index=2),content_type="multipart/x-mixed-replace;boundary=frame")
+        return StreamingHttpResponse(gen_level(VideoCamera_smile(), frame_count=30, level_index=3),content_type="multipart/x-mixed-replace;boundary=frame")
     except HttpResponseServerError as e:
         print("asborted", e)
 
 
 # _______________________________________________________________________
 
-def gen_level(camera, frame_count, level_index=0):
+def gen_today_phrase(session, camera, frame_count  ):
     while True:
-        frame = camera.get_frame(frame_count, level_index)
+        frame = camera.today_phrase(frame_count ,session)
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+
+
+def gen_non_smile(camera,frame_count, level_index=0):
+    while True:
+        frame = camera.get_frame(frame_count, level_index, 'neutral')
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+
+
+
+def gen_level(camera, frame_count, level_index=1):
+    while True:
+        frame = camera.get_frame(frame_count, level_index, 'happy')
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
@@ -232,7 +361,7 @@ def imgwrite(best_prob_level, emotion_image_data, level_index):
     data_prob = best_prob_level[0][0]
     data_img = best_prob_level[0][1]
 
-    path = 'C:/Users/acorn-508/PycharmProjects/finalProject2/aiProject/images'
+    path = 'C:/dev/finalProject2/aiProject/images'
     img = cv2.imdecode(data_img, cv2.IMREAD_COLOR)
     cv2.imwrite( path + 'best_level' + str(level_index + 1) + '.png', img)
 
@@ -265,10 +394,18 @@ def put_text_info(coordinates, image_array, text, color, font_scale=0.9, thickne
     cv2.putText(image_array, text, (x, y), cv2.FONT_HERSHEY_SIMPLEX, font_scale, color, thickness)
 
 
+def get_today_phrase():
+    return today_emotion_label
+
+def reset_today_phrase():
+    today_emotion_label.clear()
+
+
+
 def reset():
     emotion_image_data[0] = "None"
     emotion_image_data[1] = "None"
     emotion_image_data[2] = "None"
-    print(emotion_image_data)
+
 
 
