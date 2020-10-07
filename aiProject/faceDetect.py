@@ -124,14 +124,8 @@ data[0]=[1,"abc"]
 print(type(data[0]))
 
 
-exist = False
-num = 0
-while exist != True:
-    while num < 10:
-        num+=1
-        print(exist)
-    exist = True
-
+lis =[1,2,3,4,5]
+print(lis[-1])
 
 
 
