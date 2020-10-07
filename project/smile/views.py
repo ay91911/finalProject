@@ -9,6 +9,7 @@ from os.path import split
 import os
 from statistics import mode
 from smile.models import PHRASE
+from random import randint
 
 msg = "Please click the next button"
 
@@ -19,7 +20,7 @@ emotion_image_data = {0: None,  # 무표정
                       3: None,  # level_3
 
                       }
-phraseList =[]
+phraseList = {}
 
 # model path
 #대윤
@@ -58,9 +59,11 @@ def index(request):
 
 def ListPhrase(request):
     #context = {'phraseList':phraseList}
-    context ={'phraseList':phraseList}
+
+    context ={'phraseList':phraseList.values}
     print(context)
     return render(request, 'smile/emotion_detection_2.html',context)
+
 
 
 
@@ -129,23 +132,16 @@ class VideoCamera_smile:
 
                 while self.frame_count >= img_count:
 
+
                     self.today_emotion_label.append(mode(self.emotion_label_list))
 
                     print(self.today_emotion_label)
 
                     #오늘의 한마디 가져오기
-                    Phrase_list = get_list_or_404(PHRASE, EMOTION_KIND=self.today_emotion_label[0])[0]
-
-                    print(type(Phrase_list))
-
-
-
-                    phraseList.append(Phrase_list)
+                    i = randint(1,80)
+                    Phrase_list = get_list_or_404(PHRASE, EMOTION_KIND=self.today_emotion_label[0])[i-1]
+                    phraseList[0] = Phrase_list
                     print(phraseList)
-                    #print(session["loginuser"])
-                    #session["aa"] = Phrase_list
-                    #print(session["aa"])
-                    #self.msg = Phrase_list
 
 
                     success, jpeg = cv2.imencode('.jpg', frame)
@@ -416,8 +412,8 @@ def put_text_info(coordinates, image_array, text, color, font_scale=0.9, thickne
     cv2.putText(image_array, text, (x, y), cv2.FONT_HERSHEY_SIMPLEX, font_scale, color, thickness)
 
 
-# def get_today_phrase():
-#     return today_emotion_label
+def reset_today_phrase():
+    phraseList.clear()
 
 # def reset_today_phrase():
 #     today_emotion_label.clear()
