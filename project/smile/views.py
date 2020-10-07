@@ -21,17 +21,23 @@ emotion_image_data = {0: None,  # 무표정
                       }
 phraseList =[]
 
-#
+def ListPhrase(request):
+    #context = {'phraseList':phraseList}
+    context ={'phraseList':phraseList}
+    print(context)
+    return render(request, 'smile/emotion_detection_2.html',context)
+
+
 # model path
 #대윤
-# detection_model_path = 'C:/dev/finalProject2/project/smile/detection_models/haarcascade_frontalface_default.xml'
-# emotion_model_path = 'C:/dev/finalProject2/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
+detection_model_path = 'C:/dev/finalProject2/project/smile/detection_models/haarcascade_frontalface_default.xml'
+emotion_model_path = 'C:/dev/finalProject2/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
 #찬욱
 # detection_model_path = 'C:/Users/acorn-519/PycharmProjects/finalProject/project/smile/detection_models/haarcascade_frontalface_default.xml'
 # emotion_model_path = 'C:/Users/acorn-519/PycharmProjects/finalProject/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
 #아영
-detection_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/detection_models/haarcascade_frontalface_default.xml'
-emotion_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
+# detection_model_path = 'C:/dev/finalProject2/project/smile/detection_models/haarcascade_frontalface_default.xml'
+# emotion_model_path = 'C:/dev/finalProject2/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
 
 
 
@@ -132,6 +138,9 @@ class VideoCamera_smile:
 
                     Phrase_list = get_list_or_404(PHRASE, EMOTION_KIND=self.today_emotion_label[0])[0]
                     print(Phrase_list)
+                    phraseList.append(Phrase_list)
+
+
 
 
                     #print(session["loginuser"])
@@ -148,6 +157,8 @@ class VideoCamera_smile:
                     self.emotion_label_list.clear()
 
                     return jpeg_tobytes
+
+        print(phraseList)
 
         success_next, frame_next = self.video.read()
         self.faces = self.cascade.detectMultiScale(self.gray, scaleFactor=1.1, minNeighbors=5)
@@ -272,7 +283,7 @@ class VideoCamera_smile:
 #-------------------------------------------------------------------------------------------------------
 def video_today_phrase(request):
     try:
-        #session = request.session
+
         return StreamingHttpResponse(gen_today_phrase(VideoCamera_smile(), frame_count=25),
                                      content_type="multipart/x-mixed-replace;boundary=frame")
     except HttpResponseServerError as e:
@@ -368,9 +379,9 @@ def imgwrite(best_prob_level, emotion_image_data, level_index):
     # 대윤
     #path = 'C:/dev/finalProject2/aiProject/images/'
     # 찬욱
-    # path = 'C:/Users/acorn-519/PycharmProjects/finalProject/aiProject/images/'
+    path = 'C:/Users/acorn-519/PycharmProjects/finalProject/aiProject/images/'
     # 아영
-    path = 'C:/Users/acorn-508/PycharmProjects/finalProject/aiProject/images/'
+    #path = 'C:/dev/finalProject2/aiProject/images/'
 
 
     img = cv2.imdecode(data_img, cv2.IMREAD_COLOR)
@@ -404,7 +415,7 @@ def put_text_info(coordinates, image_array, text, color, font_scale=0.9, thickne
 
 # def get_today_phrase():
 #     return today_emotion_label
-#
+
 # def reset_today_phrase():
 #     today_emotion_label.clear()
 
