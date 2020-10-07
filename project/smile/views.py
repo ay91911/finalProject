@@ -19,15 +19,7 @@ emotion_image_data = {0: None,  # 무표정
                       3: None,  # level_3
 
                       }
-
-today_emotion_label =[]
-
-def ListPhrase(request,today_emotion_label):
-    # if request.method == 'POST':
-    # emotionPhrase = PHRASE.objects.filter(EMOTION_KIND=0)[0]
-    Phrase_list = get_list_or_404(PHRASE, EMOTION_KIND=today_emotion_label[0])
-    return render(request, 'smile/emotion_detection.html', {'Phrase_list': Phrase_list})
-
+phraseList =[]
 
 
 # model path
@@ -76,7 +68,7 @@ class VideoCamera_smile:
     global emotion_window
     global best_prob_level
     global emotion_image_data
-    global today_emotion_label
+    global phraseList
 
 
     def __init__(self):
@@ -92,6 +84,7 @@ class VideoCamera_smile:
         self.emo_label_exist = False
         self.emo_image_exist = False
         self.frame_count = 0
+        self.today_emotion_label = []
 
     def __del__(self):
         self.video.release()
@@ -133,12 +126,14 @@ class VideoCamera_smile:
 
                 while self.frame_count >= img_count:
 
-                    today_emotion_label.append(mode(self.emotion_label_list))
+                    self.today_emotion_label.append(mode(self.emotion_label_list))
 
-                    print(today_emotion_label)
+                    print(self.today_emotion_label)
 
-                    Phrase_list = get_list_or_404(PHRASE, EMOTION_KIND=today_emotion_label[0])[0]
+                    Phrase_list = get_list_or_404(PHRASE, EMOTION_KIND=self.today_emotion_label[0])[0]
                     print(Phrase_list)
+
+
                     #print(session["loginuser"])
                     #session["aa"] = Phrase_list
                     #print(session["aa"])
