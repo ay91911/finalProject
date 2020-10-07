@@ -402,11 +402,11 @@ def put_text_info(coordinates, image_array, text, color, font_scale=0.9, thickne
     cv2.putText(image_array, text, (x, y), cv2.FONT_HERSHEY_SIMPLEX, font_scale, color, thickness)
 
 
-def get_today_phrase():
-    return today_emotion_label
-
-def reset_today_phrase():
-    today_emotion_label.clear()
+# def get_today_phrase():
+#     return today_emotion_label
+#
+# def reset_today_phrase():
+#     today_emotion_label.clear()
 
 
 
