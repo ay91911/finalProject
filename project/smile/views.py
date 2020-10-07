@@ -21,17 +21,16 @@ emotion_image_data = {0: None,  # 무표정
                       }
 phraseList =[]
 
-#
 # model path
 #대윤
-# detection_model_path = 'C:/dev/finalProject2/project/smile/detection_models/haarcascade_frontalface_default.xml'
-# emotion_model_path = 'C:/dev/finalProject2/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
+detection_model_path = 'C:/dev/finalProject2/project/smile/detection_models/haarcascade_frontalface_default.xml'
+emotion_model_path = 'C:/dev/finalProject2/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
 #찬욱
 # detection_model_path = 'C:/Users/acorn-519/PycharmProjects/finalProject/project/smile/detection_models/haarcascade_frontalface_default.xml'
 # emotion_model_path = 'C:/Users/acorn-519/PycharmProjects/finalProject/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
 #아영
-detection_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/detection_models/haarcascade_frontalface_default.xml'
-emotion_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
+# detection_model_path = 'C:/dev/finalProject2/project/smile/detection_models/haarcascade_frontalface_default.xml'
+# emotion_model_path = 'C:/dev/finalProject2/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
 
 
 
@@ -57,6 +56,11 @@ def index(request):
         return render(request, 'service/mainpage1.html')
 
 
+def ListPhrase(request):
+    #context = {'phraseList':phraseList}
+    context ={'phraseList':phraseList}
+    print(context)
+    return render(request, 'smile/emotion_detection_2.html',context)
 
 
 
@@ -93,7 +97,6 @@ class VideoCamera_smile:
 
     # 오늘의 한마디
     def today_phrase(self, img_count):
-
         while self.emo_label_exist != True:
             success, frame = self.video.read()
             self.gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -130,10 +133,15 @@ class VideoCamera_smile:
 
                     print(self.today_emotion_label)
 
+                    #오늘의 한마디 가져오기
                     Phrase_list = get_list_or_404(PHRASE, EMOTION_KIND=self.today_emotion_label[0])[0]
-                    print(Phrase_list)
+
+                    print(type(Phrase_list))
 
 
+
+                    phraseList.append(Phrase_list)
+                    print(phraseList)
                     #print(session["loginuser"])
                     #session["aa"] = Phrase_list
                     #print(session["aa"])
@@ -148,6 +156,8 @@ class VideoCamera_smile:
                     self.emotion_label_list.clear()
 
                     return jpeg_tobytes
+
+        # print(phraseList)
 
         success_next, frame_next = self.video.read()
         self.faces = self.cascade.detectMultiScale(self.gray, scaleFactor=1.1, minNeighbors=5)
@@ -272,7 +282,7 @@ class VideoCamera_smile:
 #-------------------------------------------------------------------------------------------------------
 def video_today_phrase(request):
     try:
-        #session = request.session
+
         return StreamingHttpResponse(gen_today_phrase(VideoCamera_smile(), frame_count=25),
                                      content_type="multipart/x-mixed-replace;boundary=frame")
     except HttpResponseServerError as e:
@@ -368,9 +378,9 @@ def imgwrite(best_prob_level, emotion_image_data, level_index):
     # 대윤
     #path = 'C:/dev/finalProject2/aiProject/images/'
     # 찬욱
-    # path = 'C:/Users/acorn-519/PycharmProjects/finalProject/aiProject/images/'
+    path = 'C:/Users/acorn-519/PycharmProjects/finalProject/aiProject/images/'
     # 아영
-    path = 'C:/Users/acorn-508/PycharmProjects/finalProject/aiProject/images/'
+    #path = 'C:/dev/finalProject2/aiProject/images/'
 
 
     img = cv2.imdecode(data_img, cv2.IMREAD_COLOR)
@@ -402,11 +412,11 @@ def put_text_info(coordinates, image_array, text, color, font_scale=0.9, thickne
     cv2.putText(image_array, text, (x, y), cv2.FONT_HERSHEY_SIMPLEX, font_scale, color, thickness)
 
 
-def get_today_phrase():
-    return today_emotion_label
+# def get_today_phrase():
+#     return today_emotion_label
 
-def reset_today_phrase():
-    today_emotion_label.clear()
+# def reset_today_phrase():
+#     today_emotion_label.clear()
 
 
 
