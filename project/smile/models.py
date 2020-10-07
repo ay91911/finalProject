@@ -61,7 +61,7 @@ class FACE(models.Model):
     SMILE3_PERCENT = models.FloatField()
 
     def __str__(self):
-        return self.EMAIL
+        return str(self.STUDY_DATE)
 
 
 # Create your models here.

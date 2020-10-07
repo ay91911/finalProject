@@ -74,7 +74,7 @@ class VideoCamera_smile:
         self.video.release()
         # self.save_file_count
 
-    def get_frame(self, img_count, level_index):
+    def get_frame_new(self, img_count, level_index):
         global emotion_image_data
 
         # 학습후 저장된 데이터가 없으면!

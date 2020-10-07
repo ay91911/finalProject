@@ -19,20 +19,23 @@ emotion_image_data = {0: None,  # 무표정
                       3: None,  # level_3
 
                       }
-
-today_emotion_label =[]
-
-def ListPhrase(request,today_emotion_label):
-    # if request.method == 'POST':
-    # emotionPhrase = PHRASE.objects.filter(EMOTION_KIND=0)[0]
-    Phrase_list = get_list_or_404(PHRASE, EMOTION_KIND=today_emotion_label[0])
-    return render(request, 'smile/emotion_detection.html', {'Phrase_list': Phrase_list})
-
+phraseList =[]
 
 
 # model path
-detection_model_path = 'C:/dev/finalProject2/project/smile/detection_models/haarcascade_frontalface_default.xml'
-emotion_model_path = 'C:/dev/finalProject2/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
+#대윤
+# detection_model_path = 'C:/dev/finalProject2/project/smile/detection_models/haarcascade_frontalface_default.xml'
+# emotion_model_path = 'C:/dev/finalProject2/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
+#찬욱
+detection_model_path = 'C:/Users/acorn-519/PycharmProjects/finalProject/project/smile/detection_models/haarcascade_frontalface_default.xml'
+emotion_model_path = 'C:/Users/acorn-519/PycharmProjects/finalProject/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
+#아영
+# detection_model_path = 'C:/dev/finalProject2/project/smile/detection_models/haarcascade_frontalface_default.xml'
+# emotion_model_path = 'C:/dev/finalProject2/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
+
+
+
+
 emotion_labels = ["happy", "angry", "sad", "neutral", "surprise"]
 
 # initialization
@@ -65,7 +68,7 @@ class VideoCamera_smile:
     global emotion_window
     global best_prob_level
     global emotion_image_data
-    global today_emotion_label
+    global phraseList
 
 
     def __init__(self):
@@ -81,6 +84,7 @@ class VideoCamera_smile:
         self.emo_label_exist = False
         self.emo_image_exist = False
         self.frame_count = 0
+        self.today_emotion_label = []
 
     def __del__(self):
         self.video.release()
@@ -88,8 +92,7 @@ class VideoCamera_smile:
 
 
     # 오늘의 한마디
-    def today_phrase(self, img_count, session):
-        self.msg = " test "
+    def today_phrase(self, img_count):
 
         while self.emo_label_exist != True:
             success, frame = self.video.read()
@@ -123,16 +126,18 @@ class VideoCamera_smile:
 
                 while self.frame_count >= img_count:
 
-                    today_emotion_label.append(mode(self.emotion_label_list))
+                    self.today_emotion_label.append(mode(self.emotion_label_list))
 
-                    print(today_emotion_label)
+                    print(self.today_emotion_label)
 
-                    Phrase_list = get_list_or_404(PHRASE, EMOTION_KIND=today_emotion_label[0])[0]
+                    Phrase_list = get_list_or_404(PHRASE, EMOTION_KIND=self.today_emotion_label[0])[0]
                     print(Phrase_list)
-                    print(session["loginuser"])
-                    session["aa"] = Phrase_list
-                    print(session["aa"])
-                    self.msg = Phrase_list
+
+
+                    #print(session["loginuser"])
+                    #session["aa"] = Phrase_list
+                    #print(session["aa"])
+                    #self.msg = Phrase_list
 
 
                     success, jpeg = cv2.imencode('.jpg', frame)
@@ -147,7 +152,7 @@ class VideoCamera_smile:
         success_next, frame_next = self.video.read()
         self.faces = self.cascade.detectMultiScale(self.gray, scaleFactor=1.1, minNeighbors=5)
         for face_coordinates in self.faces:
-            put_text_info(face_coordinates, frame_next, self.msg, (0, 255, 100))
+            put_text_info(face_coordinates, frame_next, "neutral_face is detected", (0, 255, 100))
             success, jpeg = cv2.imencode('.jpg', frame_next)
             return jpeg.tobytes()
 
@@ -267,8 +272,8 @@ class VideoCamera_smile:
 #-------------------------------------------------------------------------------------------------------
 def video_today_phrase(request):
     try:
-        session = request.session
-        return StreamingHttpResponse(gen_today_phrase(session, VideoCamera_smile(), frame_count=25),
+        #session = request.session
+        return StreamingHttpResponse(gen_today_phrase(VideoCamera_smile(), frame_count=25),
                                      content_type="multipart/x-mixed-replace;boundary=frame")
     except HttpResponseServerError as e:
         print("asborted", e)
@@ -307,9 +312,9 @@ def video_smile_level3(request):
 
 # _______________________________________________________________________
 
-def gen_today_phrase(session, camera, frame_count  ):
+def gen_today_phrase(camera, frame_count):
     while True:
-        frame = camera.today_phrase(frame_count ,session)
+        frame = camera.today_phrase(frame_count)
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
@@ -324,7 +329,7 @@ def gen_non_smile(camera,frame_count, level_index=0):
 
 def gen_level(camera, frame_count, level_index=1):
     while True:
-        frame = camera.get_frame(frame_count, level_index, 'happy')
+        frame = camera.get_frame(frame_count, level_index)
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
@@ -360,16 +365,19 @@ def imgwrite(best_prob_level, emotion_image_data):
 def imgwrite(best_prob_level, emotion_image_data, level_index):
     data_prob = best_prob_level[0][0]
     data_img = best_prob_level[0][1]
+    # 대윤
+    #path = 'C:/dev/finalProject2/aiProject/images/'
+    # 찬욱
+    path = 'C:/Users/acorn-519/PycharmProjects/finalProject/aiProject/images/'
+    # 아영
+    #path = 'C:/dev/finalProject2/aiProject/images/'
 
-    path = 'C:/dev/finalProject2/aiProject/images'
+
     img = cv2.imdecode(data_img, cv2.IMREAD_COLOR)
-    cv2.imwrite( path + 'best_level' + str(level_index + 1) + '.png', img)
+    cv2.imwrite( path + 'best_level' + str(level_index) + '.png', img)
 
-    dir, file = os.path.split(path + 'best_level' + str(level_index + 1) + '.png')
+    dir, file = os.path.split(path + 'best_level' + str(level_index) + '.png')
     imgPath = dir+file
-
-
-
 
     emotion_image_data[level_index] = [data_prob,imgPath]    #emotion_image_data에 저장
 
