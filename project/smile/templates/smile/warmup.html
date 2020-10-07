@@ -1,0 +1,56 @@
+{% extends "smile/base.html" %}
+{% block content %}
+<body>
+
+ <table class="viewer" align = "center">
+        <tr>
+            <td colspan="4" class="a1"><h2 class="title2">스마일 학습</h2></td>
+        </tr>
+        <tr>
+            <td class="b1"></td>
+            <td rowspan="4" class="b2">
+                <div id =video01>
+                     <div>
+                        <h1>videoStreaming_warmup</h1>
+                        <img src="{% url 'video_neutral' %}" width="auto" height="400">
+
+                     </div>
+                </div>
+            </td>
+            <td rowspan="4" class="b3"></td>
+            <td rowspan="5" class="b4">
+                <h4 style="font-weight: bold; color: #1abc9c; margin-left: 30px;">얼굴 워밍업 스트레칭</h4>
+                <p style="font-weight: bold; margin-left: 30px;">함께 따라해 보세요!</p>
+                <p style="font-weight: bold; margin-left: 30px;">(준비됐으면 다음 버튼을 눌러주세요.)</p>
+                <div><img src="/static/smile/face_stretch.png"></div>
+
+
+            </td>
+
+
+        </tr>
+        <tr>
+            <td class="c1"></td>
+        </tr>
+        <tr>
+            <td class="d1"></td>
+        </tr>
+        <tr>
+            <td class="e1"></td>
+        </tr>
+        <tr>
+            <td class="f2" colspan="2" height="70" align="center">
+              <div class="btn-group" role="group" aria-label="Basic example">
+                <a class="btn btn-secondary" href="{% url 'smile_study' %}" role="button">◀</a>
+                <button type="button" class="btn btn-secondary">__________________________________________________________________________________________</button>
+                <a class="btn btn-secondary" href="{% url 'index' %}" role="button">▶</a>
+
+              </div>
+            </td>
+        </tr>
+    </table>
+
+
+
+</body>
+{% endblock content %}
