@@ -166,6 +166,8 @@ class VideoCamera_smile:
             success, jpeg = cv2.imencode('.jpg', frame_next)
             return jpeg.tobytes()
 
+
+    #웃는표정 무표정 학습
     def get_frame(self, img_count, level_index, emotion='happy'):
         global emotion_image_data
 
@@ -276,10 +278,12 @@ class VideoCamera_smile:
             return jpeg.tobytes()
 
 
-
-
-
 #-------------------------------------------------------------------------------------------------------
+def video(request):
+    return render(request)
+
+
+
 def video_today_phrase(request):
     try:
 

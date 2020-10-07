@@ -15,10 +15,19 @@ emotion_image_data = {0: None,  # level_1
                       2: None,  # level_3
 
                       }
-
+#
 # model path
-detection_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject2/project/smile/detection_models/haarcascade_frontalface_default.xml'
-emotion_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject2/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
+#대윤
+# detection_model_path = 'C:/dev/finalProject2/project/smile/detection_models/haarcascade_frontalface_default.xml'
+# emotion_model_path = 'C:/dev/finalProject2/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
+#찬욱
+# detection_model_path = 'C:/Users/acorn-519/PycharmProjects/finalProject/project/smile/detection_models/haarcascade_frontalface_default.xml'
+# emotion_model_path = 'C:/Users/acorn-519/PycharmProjects/finalProject/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
+#아영
+detection_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/detection_models/haarcascade_frontalface_default.xml'
+emotion_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
+
+
 emotion_labels = ["happy", "angry", "sad", "neutral", "surprise"]
 
 # initialization
@@ -39,6 +48,11 @@ def training3(request):
 def training4(request):
     return render(request, 'empathy/training_4.html')
 
+def training_result(request):
+    return render(request, 'empathy/training_result.html')
+
+def mainpage(request):
+    return render(request, 'service/mainpage1.html')
 
 
 def index(request):
@@ -246,8 +260,12 @@ def imgwrite(best_prob_level, emotion_image_data):
 def imgwrite(best_prob_level, emotion_image_data, level_index):
     data_prob = best_prob_level[0][0]
     data_img = best_prob_level[0][1]
-
-    path = 'C:/Users/acorn-508/PycharmProjects/finalProject2/aiProject/images'
+    # 대윤
+    # path = 'C:/dev/finalProject2/aiProject/images/'
+    # 찬욱
+    # path = 'C:/Users/acorn-519/PycharmProjects/finalProject/aiProject/images/'
+    # 아영
+    path = 'C:/Users/acorn-508/PycharmProjects/finalProject/aiProject/images/'
     img = cv2.imdecode(data_img, cv2.IMREAD_COLOR)
     cv2.imwrite( path + 'best_level' + str(level_index + 1) + '.png', img)
 
