@@ -24,14 +24,14 @@ phraseList = {}
 
 # model path
 #대윤
-# detection_model_path = 'C:/dev/finalProject2/project/smile/detection_models/haarcascade_frontalface_default.xml'
-# emotion_model_path = 'C:/dev/finalProject2/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
+detection_model_path = 'C:/dev/finalProject2/project/smile/detection_models/haarcascade_frontalface_default.xml'
+emotion_model_path = 'C:/dev/finalProject2/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
 #찬욱
 # detection_model_path = 'C:/Users/acorn-519/PycharmProjects/finalProject/project/smile/detection_models/haarcascade_frontalface_default.xml'
 # emotion_model_path = 'C:/Users/acorn-519/PycharmProjects/finalProject/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
 #아영
-detection_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/detection_models/haarcascade_frontalface_default.xml'
-emotion_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
+# detection_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/detection_models/haarcascade_frontalface_default.xml'
+# emotion_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
 
 
 
@@ -132,6 +132,9 @@ class VideoCamera_smile:
 
                 while self.frame_count >= img_count:
 
+                    #surprise 추가
+                    if mode(self.emotion_label_list) == 4:
+                        self.today_emotion_label.append(0)
 
                     self.today_emotion_label.append(mode(self.emotion_label_list))
 
@@ -150,6 +153,7 @@ class VideoCamera_smile:
                     self.frame_count = 0
                     self.emo_label_exist = True
                     self.emotion_label_list.clear()
+                    self.today_emotion_label.clear()
 
                     return jpeg_tobytes
 
@@ -376,11 +380,11 @@ def imgwrite(best_prob_level, emotion_image_data, level_index):
     data_prob = best_prob_level[0][0]
     data_img = best_prob_level[0][1]
     # 대윤
-    # path = 'C:/dev/finalProject2/aiProject/images/'
+    path = 'C:/dev/finalProject2/aiProject/images/'
     # 찬욱
     # path = 'C:/Users/acorn-519/PycharmProjects/finalProject/aiProject/images/'
     # 아영
-    path = 'C:/Users/acorn-508/PycharmProjects/finalProject/aiProject/images/'
+    # path = 'C:/Users/acorn-508/PycharmProjects/finalProject/aiProject/images/'
 
 
     img = cv2.imdecode(data_img, cv2.IMREAD_COLOR)
