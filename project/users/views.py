@@ -44,12 +44,12 @@ def loginProcess(request):
                 return redirect('mainpage')
             else :
                 errormessage = "1 로그인 실패. 다시 로그인하세요"
-                context = {"errormessage": errormessage}
-                return render(request, "login.html", context)
+                context = {"errormessage": errormessage, 'form': form}
+                return render(request, "users/login.html", context)
         except(USER.DoesNotExist) :
             print("333")
             errormessage="2 로그인 실패. 다시 로그인하세요"
-            context = {"errormessage": errormessage}
-            return render(request, "login.html", context)
+            context = {"errormessage": errormessage ,'form': form}
+            return render(request, "users/login.html", context)
 
     return render(request, 'users/login.html', {'form': form})
