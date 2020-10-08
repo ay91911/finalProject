@@ -8,7 +8,7 @@ import numpy as np
 from os.path import split
 import os
 from statistics import mode
-from smile.models import PHRASE, FACE
+from smile.models import PHRASE, FACE, USER
 from random import randint
 from django.utils import timezone
 
@@ -25,14 +25,14 @@ phraseList = {}
 
 # model path
 #대윤
-detection_model_path = 'C:/dev/finalProject2/project/smile/detection_models/haarcascade_frontalface_default.xml'
-emotion_model_path = 'C:/dev/finalProject2/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
+# detection_model_path = 'C:/dev/finalProject2/project/smile/detection_models/haarcascade_frontalface_default.xml'
+# emotion_model_path = 'C:/dev/finalProject2/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
 #찬욱
 # detection_model_path = 'C:/Users/acorn-519/PycharmProjects/finalProject/project/smile/detection_models/haarcascade_frontalface_default.xml'
 # emotion_model_path = 'C:/Users/acorn-519/PycharmProjects/finalProject/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
 #아영
-# detection_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/detection_models/haarcascade_frontalface_default.xml'
-# emotion_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
+detection_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/detection_models/haarcascade_frontalface_default.xml'
+emotion_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
 
 
 
@@ -386,7 +386,7 @@ def imgwrite(best_prob_level, emotion_image_data, level_index,randInt):
     # 찬욱
 
     # 아영
-
+    path = "C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/static/smile/faces/"
 
     img = cv2.imdecode(data_img, cv2.IMREAD_COLOR)
     cv2.imwrite((path +str(randInt)+ '_level_0%s_.png'%(str(level_index))), img)
@@ -425,3 +425,22 @@ def reset():
     emotion_image_data[0] = "None"
     emotion_image_data[1] = "None"
     emotion_image_data[2] = "None"
+
+
+def imageToDB(request):
+    # print("test=====")
+    print("test====="  ,  request.session["userEmail"] )
+
+    user = USER.objects.get(pk=request.session["userEmail"])
+    q=FACE(EMAIL=user ,
+           STUDY_DATE=datetime.datetime.now(),
+           NEUTRAL_PATH=emotion_image_data[0][1],
+           NEUTRAL_PERCENT=emotion_image_data[0][0],
+           SMILE1_PATH=emotion_image_data[1][1],
+           SMILE1_PERCENT=emotion_image_data[1][0],
+           SMILE2_PATH=emotion_image_data[2][1],
+           SMILE2_PERCENT=emotion_image_data[2][0],
+           SMILE3_PATH=emotion_image_data[3][1],
+           SMILE3_PERCENT=emotion_image_data[3][0],)
+    q.save()
+    return render(request, 'service/mainpage1.html')
