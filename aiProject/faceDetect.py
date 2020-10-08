@@ -124,8 +124,7 @@ data[0]=[1,"abc"]
 print(type(data[0]))
 
 
-lis =[1,2,3,4,5]
-print(lis[-1])
+lis=[]
 
 
 

@@ -40,6 +40,7 @@ def loginProcess(request):
             print(user)
             if user :
                 request.session["loginuser"] = user.USER_NM
+                request.session["userEmail"] = user.EMAIL
                 return redirect('mainpage')
             else :
                 errormessage = "1 로그인 실패. 다시 로그인하세요"
