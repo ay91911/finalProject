@@ -1,14 +1,16 @@
 from django.shortcuts import render,redirect, get_object_or_404, get_list_or_404
 from django.views.decorators import gzip
 from django.http import StreamingHttpResponse, HttpResponseServerError
-import cv2, time, operator
+import cv2, time, operator, datetime
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import img_to_array
 import numpy as np
 from os.path import split
 import os
 from statistics import mode
-from smile.models import PHRASE
+from smile.models import PHRASE, FACE, USER
+from random import randint
+from django.utils import timezone
 
 msg = "Please click the next button"
 
@@ -19,18 +21,18 @@ emotion_image_data = {0: None,  # 무표정
                       3: None,  # level_3
 
                       }
-phraseList =[]
+phraseList = {}
 
 # model path
 #대윤
-detection_model_path = 'C:/dev/finalProject2/project/smile/detection_models/haarcascade_frontalface_default.xml'
-emotion_model_path = 'C:/dev/finalProject2/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
+# detection_model_path = 'C:/dev/finalProject2/project/smile/detection_models/haarcascade_frontalface_default.xml'
+# emotion_model_path = 'C:/dev/finalProject2/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
 #찬욱
 # detection_model_path = 'C:/Users/acorn-519/PycharmProjects/finalProject/project/smile/detection_models/haarcascade_frontalface_default.xml'
 # emotion_model_path = 'C:/Users/acorn-519/PycharmProjects/finalProject/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
 #아영
-# detection_model_path = 'C:/dev/finalProject2/project/smile/detection_models/haarcascade_frontalface_default.xml'
-# emotion_model_path = 'C:/dev/finalProject2/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
+detection_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/detection_models/haarcascade_frontalface_default.xml'
+emotion_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
 
 
 
@@ -41,6 +43,7 @@ emotion_labels = ["happy", "angry", "sad", "neutral", "surprise"]
 frame_window = 30
 emotion_window = []
 best_prob_level = [None]
+randInt = randint(1,9999999)
 
 def index(request):
     if emotion_image_data[0] == None and emotion_image_data[1] == None and emotion_image_data[2] == None and emotion_image_data[3] == None:
@@ -58,9 +61,11 @@ def index(request):
 
 def ListPhrase(request):
     #context = {'phraseList':phraseList}
-    context ={'phraseList':phraseList}
+
+    context ={'phraseList':phraseList.values}
     print(context)
     return render(request, 'smile/emotion_detection_2.html',context)
+
 
 
 
@@ -129,23 +134,19 @@ class VideoCamera_smile:
 
                 while self.frame_count >= img_count:
 
+                    #surprise 추가
+                    if mode(self.emotion_label_list) == 4:
+                        self.today_emotion_label.append(0)
+
                     self.today_emotion_label.append(mode(self.emotion_label_list))
 
                     print(self.today_emotion_label)
 
                     #오늘의 한마디 가져오기
-                    Phrase_list = get_list_or_404(PHRASE, EMOTION_KIND=self.today_emotion_label[0])[0]
-
-                    print(type(Phrase_list))
-
-
-
-                    phraseList.append(Phrase_list)
+                    i = randint(1,80)
+                    Phrase_list = get_list_or_404(PHRASE, EMOTION_KIND=self.today_emotion_label[0])[i-1]
+                    phraseList[0] = Phrase_list
                     print(phraseList)
-                    #print(session["loginuser"])
-                    #session["aa"] = Phrase_list
-                    #print(session["aa"])
-                    #self.msg = Phrase_list
 
 
                     success, jpeg = cv2.imencode('.jpg', frame)
@@ -154,6 +155,7 @@ class VideoCamera_smile:
                     self.frame_count = 0
                     self.emo_label_exist = True
                     self.emotion_label_list.clear()
+                    self.today_emotion_label.clear()
 
                     return jpeg_tobytes
 
@@ -252,7 +254,7 @@ class VideoCamera_smile:
                                  (0, 255, 100))
                         success, jpeg = cv2.imencode('.jpg', frame)
 
-                        imgwrite(best_prob_level, emotion_image_data, level_index)
+                        imgwrite(best_prob_level, emotion_image_data, level_index,randInt)
 
                         self.smile_count = 0
                         self.emo_image_exist = True
@@ -376,22 +378,21 @@ def imgwrite(best_prob_level, emotion_image_data):
     print(len(emotion_image_data))
 '''
 
-def imgwrite(best_prob_level, emotion_image_data, level_index):
+def imgwrite(best_prob_level, emotion_image_data, level_index,randInt):
     data_prob = best_prob_level[0][0]
     data_img = best_prob_level[0][1]
     # 대윤
-    #path = 'C:/dev/finalProject2/aiProject/images/'
+    path = 'C:/dev/finalProject2/project/smile/static/smile/faces/'
     # 찬욱
-    path = 'C:/Users/acorn-519/PycharmProjects/finalProject/aiProject/images/'
-    # 아영
-    #path = 'C:/dev/finalProject2/aiProject/images/'
 
+    # 아영
+    path = "C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/static/smile/faces/"
 
     img = cv2.imdecode(data_img, cv2.IMREAD_COLOR)
-    cv2.imwrite( path + 'best_level' + str(level_index) + '.png', img)
-
-    dir, file = os.path.split(path + 'best_level' + str(level_index) + '.png')
-    imgPath = dir+file
+    cv2.imwrite((path +str(randInt)+ '_level_0%s_.png'%(str(level_index))), img)
+    dir, file = os.path.split((path +str(randInt)+ '_level_0%s_.png'%(str(level_index))))
+    # dir, file = os.path.split(path + 'best_level' + str(level_index) + '.png')
+    imgPath = dir+'/'+file
 
     emotion_image_data[level_index] = [data_prob,imgPath]    #emotion_image_data에 저장
 
@@ -416,12 +417,8 @@ def put_text_info(coordinates, image_array, text, color, font_scale=0.9, thickne
     cv2.putText(image_array, text, (x, y), cv2.FONT_HERSHEY_SIMPLEX, font_scale, color, thickness)
 
 
-# def get_today_phrase():
-#     return today_emotion_label
-
-# def reset_today_phrase():
-#     today_emotion_label.clear()
-
+def reset_today_phrase():
+    phraseList.clear()
 
 
 def reset():
@@ -430,4 +427,20 @@ def reset():
     emotion_image_data[2] = "None"
 
 
+def imageToDB(request):
+    # print("test=====")
+    print("test====="  ,  request.session["userEmail"] )
 
+    user = USER.objects.get(pk=request.session["userEmail"])
+    q=FACE(EMAIL=user ,
+           STUDY_DATE=datetime.datetime.now(),
+           NEUTRAL_PATH=emotion_image_data[0][1],
+           NEUTRAL_PERCENT=emotion_image_data[0][0],
+           SMILE1_PATH=emotion_image_data[1][1],
+           SMILE1_PERCENT=emotion_image_data[1][0],
+           SMILE2_PATH=emotion_image_data[2][1],
+           SMILE2_PERCENT=emotion_image_data[2][0],
+           SMILE3_PATH=emotion_image_data[3][1],
+           SMILE3_PERCENT=emotion_image_data[3][0],)
+    q.save()
+    return render(request, 'service/mainpage1.html')
