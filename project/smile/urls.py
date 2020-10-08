@@ -13,4 +13,9 @@ urlpatterns = [
     path('level_3_cam/', smile_views.video_smile_level3, name='video_smile_level3'),
     path('Phrase_list/', smile_views.ListPhrase, name='Phrase_list'),
     path('imageToDB/', smile_views.imageToDB, name='imageToDB'),
+    path('neutral_img/',smile_views.img_smile_neutral, name='img_neutral'),
+    path('level_1_img/',smile_views.img_smile_level_1, name='img_smile_level1'),
+    path('level_2_img/',smile_views.img_smile_level_2, name='img_smile_level2'),
+    path('level_3_img/',smile_views.img_smile_level_3, name='img_smile_level3'),
+
 ]

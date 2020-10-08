@@ -25,14 +25,14 @@ phraseList = {}
 
 # model path
 #대윤
-# detection_model_path = 'C:/dev/finalProject2/project/smile/detection_models/haarcascade_frontalface_default.xml'
-# emotion_model_path = 'C:/dev/finalProject2/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
+detection_model_path = 'C:/dev/finalProject2/project/smile/detection_models/haarcascade_frontalface_default.xml'
+emotion_model_path = 'C:/dev/finalProject2/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
 #찬욱
 # detection_model_path = 'C:/Users/acorn-519/PycharmProjects/finalProject/project/smile/detection_models/haarcascade_frontalface_default.xml'
 # emotion_model_path = 'C:/Users/acorn-519/PycharmProjects/finalProject/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
 #아영
-detection_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/detection_models/haarcascade_frontalface_default.xml'
-emotion_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
+# detection_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/detection_models/haarcascade_frontalface_default.xml'
+# emotion_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
 
 
 
@@ -54,7 +54,8 @@ def index(request):
         return render(request, 'smile/smile_2.html')
     elif emotion_image_data[0] != None and emotion_image_data[1] != None and emotion_image_data[2] != None and emotion_image_data[3] == None:
         return render(request, 'smile/smile_3.html')
-
+    elif emotion_image_data[0] != None and emotion_image_data[1] != None and emotion_image_data[2] != None and emotion_image_data[3] != None:
+        return render(request, 'smile/smile_3.html')
     else:
         return render(request, 'service/mainpage1.html')
 
@@ -65,6 +66,23 @@ def ListPhrase(request):
     context ={'phraseList':phraseList.values}
     print(context)
     return render(request, 'smile/emotion_detection_2.html',context)
+
+def streamingImages(request):
+    #saved_url
+    context = {'imgUrl' :emotion_image_data.values}
+    return render(request, 'smile/smile_1.html',context)
+
+
+
+class ImgCamera_smile:
+    def get_frame_img(self,level_index):
+        path = emotion_image_data[level_index][1]
+        if os.path.exists(path):
+            img = cv2.imread(path,cv2.IMREAD_COLOR)
+            success, frame = cv2.imencode('.jpg',img)
+            img = frame.tobytes()
+            return img
+        pass
 
 
 
@@ -326,6 +344,34 @@ def video_smile_level3(request):
         print("asborted", e)
 
 
+def img_smile_neutral(request):
+    try:
+        return StreamingHttpResponse(gen_img(ImgCamera_smile(),level_index=0),content_type="multipart/x-mixed-replace;boundary=frame")
+    except HttpResponseServerError as e:
+        print("asborted", e)
+
+
+def img_smile_level_1(request):
+    try:
+        return StreamingHttpResponse(gen_img(ImgCamera_smile(),level_index=1),content_type="multipart/x-mixed-replace;boundary=frame")
+    except HttpResponseServerError as e:
+        print("asborted", e)
+
+
+def img_smile_level_2(request):
+    try:
+        return StreamingHttpResponse(gen_img(ImgCamera_smile(),level_index=2),content_type="multipart/x-mixed-replace;boundary=frame")
+    except HttpResponseServerError as e:
+        print("asborted", e)
+
+
+def img_smile_level_3(request):
+    try:
+        return StreamingHttpResponse(gen_img(ImgCamera_smile(),level_index=3),content_type="multipart/x-mixed-replace;boundary=frame")
+    except HttpResponseServerError as e:
+        print("asborted", e)
+
+
 # _______________________________________________________________________
 
 def gen_today_phrase(camera, frame_count):
@@ -346,6 +392,13 @@ def gen_non_smile(camera,frame_count, level_index=0):
 def gen_level(camera, frame_count, level_index=1):
     while True:
         frame = camera.get_frame(frame_count, level_index)
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+
+
+def gen_img(camera,level_index):
+    while True:
+        frame = camera.get_frame_img(level_index)
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
@@ -386,17 +439,18 @@ def imgwrite(best_prob_level, emotion_image_data, level_index,randInt):
     # 찬욱
 
     # 아영
-    path = "C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/static/smile/faces/"
+    #path = "C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/static/smile/faces/"
 
     img = cv2.imdecode(data_img, cv2.IMREAD_COLOR)
     cv2.imwrite((path +str(randInt)+ '_level_0%s_.png'%(str(level_index))), img)
-    dir, file = os.path.split((path +str(randInt)+ '_level_0%s_.png'%(str(level_index))))
+    dir, file = os.path.split(path+(str(randInt)+ '_level_0%s_.png'%(str(level_index))))
     # dir, file = os.path.split(path + 'best_level' + str(level_index) + '.png')
     imgPath = dir+'/'+file
 
     emotion_image_data[level_index] = [data_prob,imgPath]    #emotion_image_data에 저장
 
     print(emotion_image_data)
+    print(emotion_image_data[0][1])
 
 
 
@@ -447,3 +501,4 @@ def imageToDB(request):
            SMILE3_PERCENT=emotion_image_data[3][0],)
     q.save()
     return render(request, 'service/mainpage1.html')
+
