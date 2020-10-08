@@ -400,6 +400,9 @@ def imgwrite(best_prob_level, emotion_image_data, level_index,randInt):
 
 
 
+
+
+
 def draw_rectangle(face_coordinates, image_array, color):
     x, y, w, h = face_coordinates
     cv2.rectangle(image_array, (x, y), (x + w, y + h), color, 2)
