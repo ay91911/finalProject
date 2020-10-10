@@ -22,9 +22,9 @@
                 <div>
                     <div>
                         {% for phrase in phraseList %}
-
+                            {% autoescape off %}
                             <p>{{ phrase }}</p>
-                            <p>{{ prhase.0 }}</p>
+                            {% endautoescape off %}
                         {% endfor %}
                     </div>
                 </div>

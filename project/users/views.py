@@ -53,3 +53,7 @@ def loginProcess(request):
             return render(request, "users/login.html", context)
 
     return render(request, 'users/login.html', {'form': form})
+
+def logout(request):
+    request.session.pop('loginuser')
+    return redirect('login')

@@ -51,6 +51,9 @@ def training4(request):
 def training5(request):
     return render(request, 'empathy/training_5.html')
 
+def training6(request):
+    return render(request, 'empathy/training_6.html')
+
 def training_result(request):
     return render(request, 'empathy/training_result.html')
 

@@ -27,10 +27,13 @@
                     <a class="nav-link text-white h7" href="{% url 'mainpage' %}">홈 <span class="sr-only">(current)</span></a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link text-white h7" href="{% url 'empathy_training' %}">감정 공감 트레이닝</a>
+                    <a class="nav-link text-white h7" href="{% url 'empathy_training' %}">감정 공감</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link text-white h7" href="{% url 'smile_study' %}">스마일 학습 트레이닝</a>
+                    <a class="nav-link text-white h7" href="{% url 'smile_study' %}">스마일 학습</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link text-white h7" href="#">비교하기</a>
                   </li>
                 </ul>
               </div>
@@ -42,7 +45,7 @@
                     {{ request.session.loginuser}} 님
                   </a>
                   <div class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item" href="{% url 'login' %}"  style="text-align:center">로그아웃</a>
+                    <a class="dropdown-item" href="{% url 'logout' %}"  style="text-align:center">로그아웃</a>
                   </div>
               </div>
           </nav>
