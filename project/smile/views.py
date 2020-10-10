@@ -172,8 +172,10 @@ class VideoCamera_smile:
                     #오늘의 한마디 가져오기
                     i = randint(1,80)
                     Phrase_list = get_list_or_404(PHRASE, EMOTION_KIND=self.today_emotion_label[0])[i-1]
+                    print(type(Phrase_list))
                     phraseList[0] = Phrase_list
-                    print(phraseList)
+                    print(phraseList[0])
+                    print(type(phraseList[0]))
 
 
                     success, jpeg = cv2.imencode('.jpg', frame)
