@@ -20,11 +20,19 @@
             <td rowspan="4" class="b3"></td>
             <td rowspan="5" class="b4" align = "center">
                 <div>
-
                     {% for phrase in phraseList %}
+<!--                        <p>{{phrase.body|linebreaksbr}}</p>-->
 
-                        <p>{{ phrase }}</p>
-                        <p>{{ prhase.0 }}</p>
+                        <p>{{phrase}}</p>
+
+
+
+<!--                        <textarea><c:out value="${phrase}"/></textarea>-->
+<!--                        <p>{{ prhase.0 }}</p>-->
+<!--                    <textarea>{{ phrase }}</textarea>-->
+
+<!--                     <p>{{ '테스트  <br>  uuuuuu' }}</p>-->
+
                     {% endfor %}
                 </div>
 
