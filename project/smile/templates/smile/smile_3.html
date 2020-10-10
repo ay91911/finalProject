@@ -20,10 +20,16 @@
                 </div>
             </td>
             <td rowspan="4" class="b3"></td>
-            <td rowspan="5" class="b4"></td>
+            <td rowspan="5" class="b4" align = "center">
+                <countdown-time autostart add="6s" format="{s}" class="timer"></countdown-time>
+                <div class="instr1">잘하셨어요~ <br>마지막으로 한번더 웃어볼까요?<br><br>'SUCCESS'가 화면에 나타날 때까지 <br><br>미소를 지어주세요<br><br>
+
+                </div>
+            </td>
         </tr>
         <tr>
             <td class="c1">
+
                 <img src ="{% url 'img_smile_level1' %}" width="200" height="150">
             </td>
         </tr>
@@ -34,13 +40,14 @@
         </tr>
         <tr>
             <td class="e1">
-                <img src ="{% url 'img_smile_level3' %}" width="200" height="150">
+                <img src ="/static/smile/default_image.jpg" width="200" height="150">
             </td>
         </tr>
         <tr>
             <td class="f2" colspan="2" height="70" align="center">
               <div class="btn-group" role="group" aria-label="Basic example">
-                <a class="btn btn-secondary" href="{% url 'imageToDB' %}" role="button"><</a>
+<!--                <a class="btn btn-secondary" href="{% url 'imageToDB' %}" role="button"><</a>-->
+                <a class="btn btn-secondary" href="{% url 'video_smile_reset' %}" role="button"><</a>
                 <button type="button" class="btn btn-secondary">__________________________________________________________________________________________</button>
                 <a class="btn btn-secondary" href="{% url 'index' %}" role="button">></a>
               </div>

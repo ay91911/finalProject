@@ -11,8 +11,8 @@
             <td rowspan="4" class="b2">
                 <div id =video01>
                      <div>
-                        <h1>emotion_detection</h1>
-                        <img src="/static/smile/background.png" width="500" height="auto">
+                        <h1></h1>
+                        <img src="/static/smile/background.png"width="525" height="550">
 
                      </div>
                 </div>
@@ -20,20 +20,13 @@
             <td rowspan="4" class="b3"></td>
             <td rowspan="5" class="b4" align = "center">
                 <div>
-                    {% for phrase in phraseList %}
-<!--                        <p>{{phrase.body|linebreaksbr}}</p>-->
+                    <div>
+                        {% for phrase in phraseList %}
 
-                        <p>{{phrase}}</p>
-
-
-
-<!--                        <textarea><c:out value="${phrase}"/></textarea>-->
-<!--                        <p>{{ prhase.0 }}</p>-->
-<!--                    <textarea>{{ phrase }}</textarea>-->
-
-<!--                     <p>{{ '테스트  <br>  uuuuuu' }}</p>-->
-
-                    {% endfor %}
+                            <p>{{ phrase }}</p>
+                            <p>{{ prhase.0 }}</p>
+                        {% endfor %}
+                    </div>
                 </div>
 
 
@@ -53,7 +46,7 @@
               <div class="btn-group" role="group" aria-label="Basic example">
                 <button type="button" class="btn btn-secondary">◀</button>
                 <button type="button" class="btn btn-secondary">__________________________________________________________________________________________</button>
-                <a class="btn btn-secondary" href="{% url 'index' %}" role="button">▶</a>
+                <a class="btn btn-secondary" href="{% url 'warmup' %}" role="button">▶</a>
               </div>
             </td>
         </tr>
