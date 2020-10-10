@@ -11,7 +11,8 @@ urlpatterns = [
         path('3/', empathy_views.training3, name='training3'),
         path('4/', empathy_views.training4, name='training4'),
         path('5/', empathy_views.training5, name='training5'),
-        path('6/', empathy_views.training_result, name='training_result'),
+        path('6/', empathy_views.training6, name='training6'),
+        path('7/', empathy_views.training_result, name='training_result'),
         path('mainpage/', empathy_views.mainpage, name='mainpage'),
 
         path('1/test', empathy_views.happy_training, name='happy_training'),
