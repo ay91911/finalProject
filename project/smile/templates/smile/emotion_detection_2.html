@@ -11,8 +11,8 @@
             <td rowspan="4" class="b2">
                 <div id =video01>
                      <div>
-                        <h1>emotion_detection</h1>
-                        <img src="/static/smile/background.png" width="500" height="auto">
+                        <h1></h1>
+                        <img src="/static/smile/background.png"width="525" height="550">
 
                      </div>
                 </div>
@@ -20,12 +20,13 @@
             <td rowspan="4" class="b3"></td>
             <td rowspan="5" class="b4" align = "center">
                 <div>
+                    <div>
+                        {% for phrase in phraseList %}
 
-                    {% for phrase in phraseList %}
-
-                        <p>{{ phrase }}</p>
-                        <p>{{ prhase.0 }}</p>
-                    {% endfor %}
+                            <p>{{ phrase }}</p>
+                            <p>{{ prhase.0 }}</p>
+                        {% endfor %}
+                    </div>
                 </div>
 
 
