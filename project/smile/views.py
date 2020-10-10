@@ -72,6 +72,9 @@ def streamingImages(request):
     context = {'imgUrl' :emotion_image_data.values}
     return render(request, 'smile/smile_1.html',context)
 
+def warmup(request):
+    return render(request, 'smile/warmup.html')
+
 
 
 class ImgCamera_smile:

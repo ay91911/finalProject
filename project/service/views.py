@@ -4,6 +4,9 @@ from django.contrib import messages
 def mainpage(request):
     return render(request, 'service/mainpage1.html')
 
+def smile_prepare(request):
+    return render(request, 'smile/start.html')
+
 def smile_study(request):
     return render(request, 'smile/emotion_detection.html')
 
