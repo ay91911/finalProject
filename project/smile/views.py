@@ -404,11 +404,12 @@ def img_smile_level_3(request):
 
 def get_best_smile_img(request):
     best_smile_img = max([emotion_image_data[1],emotion_image_data[2],emotion_image_data[3]])[0] #퍼센트
-    for keys, values in best_smile_img.items():
+    for keys, values in emotion_image_data.items():
         if values[0] == best_smile_img:
             img_keys = keys
 
-        img_keys = 3
+        else:
+            img_keys = 3
     print(img_keys)
 
     if img_keys == 1:
