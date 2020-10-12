@@ -408,17 +408,38 @@ def get_best_smile_img(request):
         if values[0] == best_smile_img:
             img_keys = keys
 
+        img_keys = 3
+    print(img_keys)
+
     if img_keys == 1:
-        img_smile_level_1(request)
+        try:
+            return StreamingHttpResponse(gen_img(ImgCamera_smile(), level_index=1),
+                                         content_type="multipart/x-mixed-replace;boundary=frame")
+        except HttpResponseServerError as e:
+            print("asborted", e)
 
-    elif img_keys ==2:
-        img_smile_level_2(request)
 
-    elif img_keys ==3:
-        img_smile_level_3(request)
+    elif img_keys == 2:
+        try:
+            return StreamingHttpResponse(gen_img(ImgCamera_smile(), level_index=2),
+                                         content_type="multipart/x-mixed-replace;boundary=frame")
+        except HttpResponseServerError as e:
+            print("asborted", e)
+
+
+    elif img_keys == 3:
+        try:
+            return StreamingHttpResponse(gen_img(ImgCamera_smile(), level_index=3),
+                                         content_type="multipart/x-mixed-replace;boundary=frame")
+        except HttpResponseServerError as e:
+            print("asborted", e)
 
     else:
-        pass
+        try:
+            return StreamingHttpResponse(gen_img(ImgCamera_smile(), level_index=3),
+                                         content_type="multipart/x-mixed-replace;boundary=frame")
+        except HttpResponseServerError as e:
+            print("asborted", e)
 
 
 
