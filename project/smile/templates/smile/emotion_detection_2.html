@@ -18,13 +18,12 @@
                 </div>
             </td>
             <td rowspan="4" class="b3"></td>
-            <td style="background-image:url('/static/smile/night.jpg');" rowspan="5" class="b4" align = "center">
+            <td rowspan="5" class="b4" align = "center" style="padding:20px;">
                 <div>
                     <div>
-
                         {% for phrase in phraseList %}
                             {% autoescape off %}
-                            <p style="color:yellow;">{{ phrase }}</p>
+                            <p class="fNP" style="font-size:30px;">{{ phrase }}</p>
                             {% endautoescape off %}
                         {% endfor %}
                     </div>
