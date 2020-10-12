@@ -16,6 +16,7 @@ urlpatterns = [
     path('reset_cam/', smile_views.reset, name='video_smile_reset'),
     path('Phrase_list/', smile_views.ListPhrase, name='Phrase_list'),
     path('warmup/', smile_views.warmup, name='warmup'),
+    path('result/', smile_views.result, name='result'),
 
     path('imageToDB/', smile_views.imageToDB, name='imageToDB'),
     path('neutral_img/',smile_views.img_smile_neutral, name='img_neutral'),
