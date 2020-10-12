@@ -18,7 +18,7 @@ urlpatterns = [
     path('warmup/', smile_views.warmup, name='warmup'),
     path('result/', smile_views.result, name='result'),
 
-    path('imageToDB/', smile_views.imageToDB, name='imageToDB'),
+    path('mainpage/', smile_views.imageToDB, name='imageToDB'),
     path('neutral_img/',smile_views.img_smile_neutral, name='img_neutral'),
     path('level_1_img/',smile_views.img_smile_level_1, name='img_smile_level1'),
     path('level_2_img/',smile_views.img_smile_level_2, name='img_smile_level2'),
