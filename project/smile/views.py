@@ -25,14 +25,14 @@ phraseList = {}
 
 # model path
 # #대윤
-detection_model_path = 'C:/dev/finalProject2/project/smile/detection_models/haarcascade_frontalface_default.xml'
-emotion_model_path = 'C:/dev/finalProject2/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
+# detection_model_path = 'C:/dev/finalProject2/project/smile/detection_models/haarcascade_frontalface_default.xml'
+# emotion_model_path = 'C:/dev/finalProject2/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
 # 찬욱
 # detection_model_path = 'C:/Users/acorn-519/PycharmProjects/finalProject/project/smile/detection_models/haarcascade_frontalface_default.xml'
 # emotion_model_path = 'C:/Users/acorn-519/PycharmProjects/finalProject/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
 #아영
-# detection_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/detection_models/haarcascade_frontalface_default.xml'
-# emotion_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
+detection_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/detection_models/haarcascade_frontalface_default.xml'
+emotion_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
 
 
 
@@ -325,7 +325,7 @@ def video(request):
 
 def video_today_phrase(request):
     try:
-        time.sleep(5)
+        time.sleep(3)
         return StreamingHttpResponse(gen_today_phrase(VideoCamera_smile(), frame_count=25),
                                      content_type="multipart/x-mixed-replace;boundary=frame")
     except HttpResponseServerError as e:
@@ -333,7 +333,7 @@ def video_today_phrase(request):
 
 def video_neutral(request):
     try:
-        time.sleep(5)
+        time.sleep(3)
         return StreamingHttpResponse(gen_non_smile(VideoCamera_smile(), frame_count=15, level_index=0),
                                      content_type="multipart/x-mixed-replace;boundary=frame")
     except HttpResponseServerError as e:
@@ -343,7 +343,7 @@ def video_neutral(request):
 
 def video_smile_level1(request):
     try:
-        time.sleep(5)
+        time.sleep(3)
         return StreamingHttpResponse(gen_level(VideoCamera_smile(), frame_count=10, level_index=1),
                                      content_type="multipart/x-mixed-replace;boundary=frame")
     except HttpResponseServerError as e:
@@ -352,7 +352,7 @@ def video_smile_level1(request):
 
 def video_smile_level2(request):
     try:
-        time.sleep(5)
+        time.sleep(3)
         return StreamingHttpResponse(gen_level(VideoCamera_smile(), frame_count=20, level_index=2),
                                      content_type="multipart/x-mixed-replace;boundary=frame")
     except HttpResponseServerError as e:
@@ -361,7 +361,7 @@ def video_smile_level2(request):
 
 def video_smile_level3(request):
     try:
-        time.sleep(5)
+        time.sleep(3)
         return StreamingHttpResponse(gen_level(VideoCamera_smile(), frame_count=30, level_index=3),content_type="multipart/x-mixed-replace;boundary=frame")
     except HttpResponseServerError as e:
         print("asborted", e)
@@ -515,11 +515,11 @@ def imgwrite(best_prob_level, emotion_image_data, level_index,randInt):
     data_prob = best_prob_level[0][0]
     data_img = best_prob_level[0][1]
     # 대윤
-    path = 'C:/dev/finalProject2/project/smile/static/smile/faces/'
+    # path = 'C:/dev/finalProject2/project/smile/static/smile/faces/'
     # 찬욱
     # path = 'C:/Users/acorn-519/PycharmProjects/finalProject/project/smile/static/smile/faces'
     # 아영
-    # path = "C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/static/smile/faces/"
+    path = "C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/static/smile/faces/"
 
     img = cv2.imdecode(data_img, cv2.IMREAD_COLOR)
     cv2.imwrite((path +str(randInt)+ '_level_0%s_.png'%(str(level_index))), img)
@@ -573,8 +573,15 @@ def reset(request):
 #     return render(request, 'service/mainpage1.html')
 
 def imageToDB(request):
+    emotion_image_data[0] = None
+    emotion_image_data[1] = None
+    emotion_image_data[2] = None
+    emotion_image_data[3] = None
+
     # print("test=====")
     print("test====="  ,  request.session["userEmail"] )
+
+
 
     user = USER.objects.get(pk=request.session["userEmail"])
     q=FACE(EMAIL=user ,
