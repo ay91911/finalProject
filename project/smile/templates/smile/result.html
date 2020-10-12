@@ -1,0 +1,62 @@
+{% extends "smile/base.html" %}
+{% block content %}
+<body>
+
+<body style="background-color:#000000">
+    <header class = "site-header">
+      <div>
+          <div class="collapse" id="navbarToggleExternalContent">
+            <div class="bg-signiture p-4">
+              <h5 class="text-white h4">Collapsed content</h5>
+              <span class="text-muted">Toggleable via the navbar brand.</span>
+            </div>
+          </div>
+          <nav class="navbar navbar-dark bg-signiture" >
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand mb-0 h1" href="#">{{ request.session.loginuser}} 님</a>
+          </nav>
+        </div>
+    </header>
+    <table class="viewer" align = "center">
+        <tr>
+            <td colspan="4" class="a1"><h2 class="title2">스마일 학습</h2></td>
+        </tr>
+        <tr>
+            <td class="rb1"></td>
+            <td class="rb1"></td>
+            <td class="b3"></td>
+            <td rowspan="3" class="b4">
+              <h4 style="font-weight: bold; color: #1abc9c; margin-left: 30px;">학습 결과 베스트컷</h4>
+              <!--여기 사진 들어가면 됨-->
+              <a class="btn btn-secondary btn-lg" href="#" role="button" style="margin: 50px;">다시하기</a>
+              <a class="btn btn-info btn-lg" href="#" role="button" style="margin: 50px;">저장하기</a>
+
+            </td>
+        </tr>
+        <tr>
+        </tr>
+        <tr>
+            <td class="rb1"></td>
+            <td class="rb1"></td>
+            <td class="b3"></td>
+            </td>
+        </tr>
+        <tr>
+        </tr>
+        <tr>
+            <td class="f2" colspan="2" height="70" align="center">
+              <div class="btn-group" role="group" aria-label="Basic example">
+                <button type="button" class="btn btn-secondary">◀</button>
+                <button type="button" class="btn btn-secondary">__________________________________________________________________________________________</button>
+                <a class="btn btn-secondary" href="{% url 'index' %}" role="button">▶</a>
+              </div>
+            </td>
+        </tr>
+    </table>
+
+
+
+</body>
+{% endblock content %}

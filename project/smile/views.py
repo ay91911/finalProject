@@ -75,6 +75,9 @@ def streamingImages(request):
 def warmup(request):
     return render(request, 'smile/warmup.html')
 
+def result(request):
+    return render(request, 'smile/result.html')
+
 
 
 class ImgCamera_smile:
