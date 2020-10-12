@@ -23,18 +23,29 @@
     font-family: 'Nanum Pen Script', cursive;
 }
 
+.btn-group {
+    height:40px;
+    margin: 0px;
+}
+
+
+
+
 </style>
 </head>
 <body style="background-color:#000000">
     <header class = "site-header">
       <div>
           <nav class="navbar navbar-expand-lg navbar-light bg-signiture " style="height:50px">
-              <a class="navbar-brand text-white h5" href="{% url 'mainpage' %}" >감성82</a>
+              <a href="{% url 'mainpage' %}" ><img src="/static/service/logo.jpg" height="50px"></a>
               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
               <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
+                  <li class="nav-item active">
+                     &nbsp;
+                  </li>
                   <li class="nav-item active">
                     <a class="nav-link text-white h7" href="{% url 'mainpage' %}">홈 </a>
                   </li>
