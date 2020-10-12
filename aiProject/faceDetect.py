@@ -5,10 +5,14 @@ from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.models import load_model
 import time,os
 
-path = "#"
-img=cv2.imread(path,cv2.IMREAD_COLOR)
-print(img)
-success, frame = cv2.imencode('.jpg',img)
-print(frame)
-img=frame.tobytes()
-print(img)
+
+
+dic ={0:[98.02,'abc'],
+      1:[59.03,'avds'],
+      2:[87.54,'dsdf'],
+      3:[99.99,'sedsdf00']}
+
+best_smile = max([dic[1],dic[2],dic[3]])[0]
+for keys, values in dic.items():
+    if values[0] == best_smile:
+        print(keys)

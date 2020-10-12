@@ -24,22 +24,30 @@
             <td colspan="4" class="a1"><h2 class="title2">스마일 학습</h2></td>
         </tr>
         <tr>
-            <td class="rb1"></td>
-            <td class="rb1"></td>
+            <td class="rb1">
+                <img src ="{% url 'img_neutral' %}" width="350" height="280">
+            </td>
+            <td class="rb1">
+                <img src ="{% url 'img_smile_level1' %}" width="350" height="280">
+            </td>
             <td class="b3"></td>
             <td rowspan="3" class="b4">
               <h4 style="font-weight: bold; color: #1abc9c; margin-left: 30px;">학습 결과 베스트컷</h4>
-              <!--여기 사진 들어가면 됨-->
-              <a class="btn btn-secondary btn-lg" href="#" role="button" style="margin: 50px;">다시하기</a>
-              <a class="btn btn-info btn-lg" href="#" role="button" style="margin: 50px;">저장하기</a>
-
+<!--                <img src ="{% url 'img_smile_best' %}" width="350" height="280">-->
+                <img src ="{% url 'img_smile_level3'%}" width="350" height="280">
+              <a class="btn btn-secondary btn-lg" href="{% url 'video_smile_reset' %}" role="button" style="margin: 50px;">다시하기</a>
+              <a class="btn btn-info btn-lg" href="{% url 'imageToDB' %}" role="button" style="margin: 50px;">저장하기</a>
             </td>
         </tr>
         <tr>
         </tr>
         <tr>
-            <td class="rb1"></td>
-            <td class="rb1"></td>
+            <td class="rb1">
+                <img src ="{% url 'img_smile_level2' %}" width="350" height="280">
+            </td>
+            <td class="rb1">
+                <img src ="{% url 'img_smile_level3'%}" width="350" height="280">
+            </td>
             <td class="b3"></td>
             </td>
         </tr>
@@ -50,7 +58,7 @@
               <div class="btn-group" role="group" aria-label="Basic example">
                 <button type="button" class="btn btn-secondary">◀</button>
                 <button type="button" class="btn btn-secondary">__________________________________________________________________________________________</button>
-                <a class="btn btn-secondary" href="{% url 'index' %}" role="button">▶</a>
+                <a class="btn btn-secondary" href="{% url 'mainpage' %}" role="button">▶</a>
               </div>
             </td>
         </tr>

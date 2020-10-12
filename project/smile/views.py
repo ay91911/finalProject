@@ -402,9 +402,51 @@ def img_smile_level_3(request):
     except HttpResponseServerError as e:
         print("asborted", e)
 
+def get_best_smile_img(request):
+    best_smile_img = max([emotion_image_data[1],emotion_image_data[2],emotion_image_data[3]])[0] #퍼센트
+    for keys, values in emotion_image_data.items():
+        if values[0] == best_smile_img:
+            img_keys = keys
+
+        else:
+            img_keys = 3
+    print(img_keys)
+
+    if img_keys == 1:
+        try:
+            return StreamingHttpResponse(gen_img(ImgCamera_smile(), level_index=1),
+                                         content_type="multipart/x-mixed-replace;boundary=frame")
+        except HttpResponseServerError as e:
+            print("asborted", e)
 
 
-# _______________________________________________________________________
+    elif img_keys == 2:
+        try:
+            return StreamingHttpResponse(gen_img(ImgCamera_smile(), level_index=2),
+                                         content_type="multipart/x-mixed-replace;boundary=frame")
+        except HttpResponseServerError as e:
+            print("asborted", e)
+
+
+    elif img_keys == 3:
+        try:
+            return StreamingHttpResponse(gen_img(ImgCamera_smile(), level_index=3),
+                                         content_type="multipart/x-mixed-replace;boundary=frame")
+        except HttpResponseServerError as e:
+            print("asborted", e)
+
+    else:
+        try:
+            return StreamingHttpResponse(gen_img(ImgCamera_smile(), level_index=3),
+                                         content_type="multipart/x-mixed-replace;boundary=frame")
+        except HttpResponseServerError as e:
+            print("asborted", e)
+
+
+
+
+
+    # _______________________________________________________________________
 
 def gen_today_phrase(camera, frame_count):
     while True:
@@ -473,11 +515,11 @@ def imgwrite(best_prob_level, emotion_image_data, level_index,randInt):
     data_prob = best_prob_level[0][0]
     data_img = best_prob_level[0][1]
     # 대윤
-    # path = 'C:/dev/finalProject2/project/smile/static/smile/faces/'
+    path = 'C:/dev/finalProject2/project/smile/static/smile/faces/'
     # 찬욱
     # path = 'C:/Users/acorn-519/PycharmProjects/finalProject/project/smile/static/smile/faces'
     # 아영
-    path = "C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/static/smile/faces/"
+    # path = "C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/static/smile/faces/"
 
     img = cv2.imdecode(data_img, cv2.IMREAD_COLOR)
     cv2.imwrite((path +str(randInt)+ '_level_0%s_.png'%(str(level_index))), img)
