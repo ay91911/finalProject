@@ -573,10 +573,7 @@ def reset(request):
 #     return render(request, 'service/mainpage1.html')
 
 def imageToDB(request):
-    emotion_image_data[0] = None
-    emotion_image_data[1] = None
-    emotion_image_data[2] = None
-    emotion_image_data[3] = None
+
 
     # print("test=====")
     print("test====="  ,  request.session["userEmail"] )
@@ -595,6 +592,10 @@ def imageToDB(request):
            SMILE3_PATH=emotion_image_data[3][1].split('project/smile')[1],
            SMILE3_PERCENT=emotion_image_data[3][0],)
 
+    emotion_image_data[0] = None
+    emotion_image_data[1] = None
+    emotion_image_data[2] = None
+    emotion_image_data[3] = None
     q.save()
     return render(request, 'service/mainpage1.html')
 
