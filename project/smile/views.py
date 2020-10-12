@@ -399,9 +399,29 @@ def img_smile_level_3(request):
     except HttpResponseServerError as e:
         print("asborted", e)
 
+def get_best_smile_img(request):
+    best_smile_img = max([emotion_image_data[1],emotion_image_data[2],emotion_image_data[3]])[0] #퍼센트
+    for keys, values in best_smile_img.items():
+        if values[0] == best_smile_img:
+            img_keys = keys
+
+    if img_keys == 1:
+        img_smile_level_1(request)
+
+    elif img_keys ==2:
+        img_smile_level_2(request)
+
+    elif img_keys ==3:
+        img_smile_level_3(request)
+
+    else:
+        pass
 
 
-# _______________________________________________________________________
+
+
+
+    # _______________________________________________________________________
 
 def gen_today_phrase(camera, frame_count):
     while True:
@@ -470,11 +490,11 @@ def imgwrite(best_prob_level, emotion_image_data, level_index,randInt):
     data_prob = best_prob_level[0][0]
     data_img = best_prob_level[0][1]
     # 대윤
-    # path = 'C:/dev/finalProject2/project/smile/static/smile/faces/'
+    path = 'C:/dev/finalProject2/project/smile/static/smile/faces/'
     # 찬욱
     # path = 'C:/Users/acorn-519/PycharmProjects/finalProject/project/smile/static/smile/faces'
     # 아영
-    path = "C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/static/smile/faces/"
+    # path = "C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/static/smile/faces/"
 
     img = cv2.imdecode(data_img, cv2.IMREAD_COLOR)
     cv2.imwrite((path +str(randInt)+ '_level_0%s_.png'%(str(level_index))), img)
