@@ -25,14 +25,14 @@ phraseList = {}
 
 # model path
 # #대윤
-# detection_model_path = 'C:/dev/finalProject2/project/smile/detection_models/haarcascade_frontalface_default.xml'
-# emotion_model_path = 'C:/dev/finalProject2/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
+detection_model_path = 'C:/dev/finalProject2/project/smile/detection_models/haarcascade_frontalface_default.xml'
+emotion_model_path = 'C:/dev/finalProject2/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
 # 찬욱
 # detection_model_path = 'C:/Users/acorn-519/PycharmProjects/finalProject/project/smile/detection_models/haarcascade_frontalface_default.xml'
 # emotion_model_path = 'C:/Users/acorn-519/PycharmProjects/finalProject/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
 #아영
-detection_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/detection_models/haarcascade_frontalface_default.xml'
-emotion_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
+# detection_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/detection_models/haarcascade_frontalface_default.xml'
+# emotion_model_path = 'C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/emotion_models/_vgg16_01_.34-0.77-0.6478.h5'
 
 
 
@@ -196,7 +196,7 @@ class VideoCamera_smile:
         success_next, frame_next = self.video.read()
         self.faces = self.cascade.detectMultiScale(self.gray, scaleFactor=1.1, minNeighbors=5)
         for face_coordinates in self.faces:
-            put_text_info(face_coordinates, frame_next, "Your face is detected", (0, 255, 100))
+            put_text_info(face_coordinates, frame_next, "", (0, 255, 100))
             success, jpeg = cv2.imencode('.jpg', frame_next)
             return jpeg.tobytes()
 
@@ -281,8 +281,8 @@ class VideoCamera_smile:
 
                         best_prob_level[0] = max(prob_list)  # [[prob, img]]
                         draw_rectangle(face_coordinates, frame, (0, 255, 100))
-                        put_text(face_coordinates, frame, (str(self.smile_count)),
-                                 (0, 255, 100))
+                        # put_text(face_coordinates, frame),
+                        #          (0, 255, 100))
                         success, jpeg = cv2.imencode('.jpg', frame)
 
                         imgwrite(best_prob_level, emotion_image_data, level_index,randInt)
@@ -326,7 +326,7 @@ def video(request):
 def video_today_phrase(request):
     try:
         time.sleep(3)
-        return StreamingHttpResponse(gen_today_phrase(VideoCamera_smile(), frame_count=25),
+        return StreamingHttpResponse(gen_today_phrase(VideoCamera_smile(), frame_count=45),
                                      content_type="multipart/x-mixed-replace;boundary=frame")
     except HttpResponseServerError as e:
         print("asborted", e)
@@ -515,11 +515,11 @@ def imgwrite(best_prob_level, emotion_image_data, level_index,randInt):
     data_prob = best_prob_level[0][0]
     data_img = best_prob_level[0][1]
     # 대윤
-    # path = 'C:/dev/finalProject2/project/smile/static/smile/faces/'
+    path = 'C:/dev/finalProject2/project/smile/static/smile/faces/'
     # 찬욱
     # path = 'C:/Users/acorn-519/PycharmProjects/finalProject/project/smile/static/smile/faces'
     # 아영
-    path = "C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/static/smile/faces/"
+    # path = "C:/Users/acorn-508/PycharmProjects/finalProject/project/smile/static/smile/faces/"
 
     img = cv2.imdecode(data_img, cv2.IMREAD_COLOR)
     cv2.imwrite((path +str(randInt)+ '_level_0%s_.png'%(str(level_index))), img)
