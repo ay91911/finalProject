@@ -13,11 +13,14 @@
         </tr>
         {% for post in posts %}
         <tr>
-            <td class=c1 rowspan="2"><img src="{{ post.NEUTRAL_PATH }}"></td>
-            <td class=c2><img src="/static/status/stark2.jpg" class="photo4" ></td>
-            <td class=c2><img src="/static/status/stark2.jpg" class="photo4" ></td>
-        </tr>
+<!--            <td class=c1 rowspan="2"><img src="{{ post.NEUTRAL_PATH }}"></td>-->
+            <td class=c1 rowspan="2">{{post}}</td>
         {% endfor %}
+            <td class=c2><img src="/static/status/stark2.jpg" class="photo4" ></td>
+            <td class=c2><img src="/s
+            tatic/status/stark2.jpg" class="photo4" ></td>
+        </tr>
+
         <tr>
             <td class=c2><img src="/static/status/stark2.jpg" class="photo4" ></td>
             <td class=c2><img src="/static/status/stark2.jpg" class="photo4" ></td>
