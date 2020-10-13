@@ -16,6 +16,7 @@ def empathy_training(request):
     return render(request, 'empathy/training.html')
 
 def compare_photos(request):
+
     face_latest = FACE.objects.filter(EMAIL=request.session["userEmail"]).latest('STUDY_DATE')
 
     face_list = FACE.objects.filter(EMAIL=request.session["userEmail"]).order_by('STUDY_DATE').reverse()
@@ -45,7 +46,7 @@ def compare_photos(request):
         'faces': face_latest,
         'percent' : percent_max,
         'best_smile':best_smile,
-        'list': face_list
+        'list': face_list,
 
     }
 
