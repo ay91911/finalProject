@@ -583,13 +583,13 @@ def imageToDB(request):
     user = USER.objects.get(pk=request.session["userEmail"])
     q=FACE(EMAIL=user ,
            STUDY_DATE=datetime.datetime.now(),
-           NEUTRAL_PATH=emotion_image_data[0][1],
+           NEUTRAL_PATH=emotion_image_data[0][1].split('project/smile')[1], #DB저장: /static/smile/faces/__.png
            NEUTRAL_PERCENT=emotion_image_data[0][0],
-           SMILE1_PATH=emotion_image_data[1][1],
+           SMILE1_PATH=emotion_image_data[1][1].split('project/smile')[1],
            SMILE1_PERCENT=emotion_image_data[1][0],
-           SMILE2_PATH=emotion_image_data[2][1],
+           SMILE2_PATH=emotion_image_data[2][1].split('project/smile')[1],
            SMILE2_PERCENT=emotion_image_data[2][0],
-           SMILE3_PATH=emotion_image_data[3][1],
+           SMILE3_PATH=emotion_image_data[3][1].split('project/smile')[1],
            SMILE3_PERCENT=emotion_image_data[3][0],)
 
     emotion_image_data[0] = None
