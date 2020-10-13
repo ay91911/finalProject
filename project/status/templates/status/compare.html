@@ -1,6 +1,7 @@
 {% extends "status/base.html" %}
 {% block content %}
 
+
     <h2 class = "comparetitle">나의 웃는 얼굴</h2>
 
     <table class="comparephoto" bgcolor = "#e9eeec">
@@ -10,11 +11,13 @@
         <tr style="height: 50px;">
             <td><img src="/static/status/smilemark.png" style="margin:20px 0 0 50px; width: 50px; height: 50px;"></td>
         </tr>
+        {% for post in posts %}
         <tr>
-            <td class=c1 rowspan="2"><img src="/static/status/stark2.jpg"></td>
+            <td class=c1 rowspan="2"><img src="{{ post.NEUTRAL_PATH }}"></td>
             <td class=c2><img src="/static/status/stark2.jpg" class="photo4" ></td>
             <td class=c2><img src="/static/status/stark2.jpg" class="photo4" ></td>
         </tr>
+        {% endfor %}
         <tr>
             <td class=c2><img src="/static/status/stark2.jpg" class="photo4" ></td>
             <td class=c2><img src="/static/status/stark2.jpg" class="photo4" ></td>
@@ -33,4 +36,5 @@
 
 
 </body>
+
 {% endblock content %}
