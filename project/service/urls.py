@@ -22,11 +22,10 @@ from django.conf import settings
 
 urlpatterns = [
     path('', service_views.mainpage, name='mainpage'),
-    path('', service_views.mainpage, name='mainpage'),
-    path('', service_views.mainpage, name='mainpage'),
     path('smile0/', service_views.smile_prepare, name='smile_prepare'),
     path('smile/', service_views.smile_study, name='smile_study'),
     path('empathy/', service_views.empathy_training, name='empathy_training'),
+    path('compare/', service_views.compare_photos, name='compare'),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

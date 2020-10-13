@@ -12,3 +12,6 @@ def smile_study(request):
 
 def empathy_training(request):
     return render(request, 'empathy/training.html')
+
+def compare_photos(request):
+    return render(request, 'status/compare.html')
