@@ -196,7 +196,7 @@ class VideoCamera_smile:
         success_next, frame_next = self.video.read()
         self.faces = self.cascade.detectMultiScale(self.gray, scaleFactor=1.1, minNeighbors=5)
         for face_coordinates in self.faces:
-            put_text_info(face_coordinates, frame_next, "Your face is detected", (0, 255, 100))
+            put_text_info(face_coordinates, frame_next, "", (0, 255, 100))
             success, jpeg = cv2.imencode('.jpg', frame_next)
             return jpeg.tobytes()
 
@@ -281,8 +281,8 @@ class VideoCamera_smile:
 
                         best_prob_level[0] = max(prob_list)  # [[prob, img]]
                         draw_rectangle(face_coordinates, frame, (0, 255, 100))
-                        put_text(face_coordinates, frame, (str(self.smile_count)),
-                                 (0, 255, 100))
+                        # put_text(face_coordinates, frame),
+                        #          (0, 255, 100))
                         success, jpeg = cv2.imencode('.jpg', frame)
 
                         imgwrite(best_prob_level, emotion_image_data, level_index,randInt)
@@ -325,15 +325,15 @@ def video(request):
 
 def video_today_phrase(request):
     try:
-        time.sleep(5)
-        return StreamingHttpResponse(gen_today_phrase(VideoCamera_smile(), frame_count=25),
+        time.sleep(3)
+        return StreamingHttpResponse(gen_today_phrase(VideoCamera_smile(), frame_count=45),
                                      content_type="multipart/x-mixed-replace;boundary=frame")
     except HttpResponseServerError as e:
         print("asborted", e)
 
 def video_neutral(request):
     try:
-        time.sleep(5)
+        time.sleep(3)
         return StreamingHttpResponse(gen_non_smile(VideoCamera_smile(), frame_count=15, level_index=0),
                                      content_type="multipart/x-mixed-replace;boundary=frame")
     except HttpResponseServerError as e:
@@ -343,7 +343,7 @@ def video_neutral(request):
 
 def video_smile_level1(request):
     try:
-        time.sleep(5)
+        time.sleep(3)
         return StreamingHttpResponse(gen_level(VideoCamera_smile(), frame_count=10, level_index=1),
                                      content_type="multipart/x-mixed-replace;boundary=frame")
     except HttpResponseServerError as e:
@@ -352,7 +352,7 @@ def video_smile_level1(request):
 
 def video_smile_level2(request):
     try:
-        time.sleep(5)
+        time.sleep(3)
         return StreamingHttpResponse(gen_level(VideoCamera_smile(), frame_count=20, level_index=2),
                                      content_type="multipart/x-mixed-replace;boundary=frame")
     except HttpResponseServerError as e:
@@ -361,7 +361,7 @@ def video_smile_level2(request):
 
 def video_smile_level3(request):
     try:
-        time.sleep(5)
+        time.sleep(3)
         return StreamingHttpResponse(gen_level(VideoCamera_smile(), frame_count=30, level_index=3),content_type="multipart/x-mixed-replace;boundary=frame")
     except HttpResponseServerError as e:
         print("asborted", e)
@@ -573,21 +573,29 @@ def reset(request):
 #     return render(request, 'service/mainpage1.html')
 
 def imageToDB(request):
+
+
     # print("test=====")
     print("test====="  ,  request.session["userEmail"] )
+
+
 
     user = USER.objects.get(pk=request.session["userEmail"])
     q=FACE(EMAIL=user ,
            STUDY_DATE=datetime.datetime.now(),
-           NEUTRAL_PATH=emotion_image_data[0][1],
+           NEUTRAL_PATH=emotion_image_data[0][1].split('project/smile')[1], #DB저장: /static/smile/faces/__.png
            NEUTRAL_PERCENT=emotion_image_data[0][0],
-           SMILE1_PATH=emotion_image_data[1][1],
+           SMILE1_PATH=emotion_image_data[1][1].split('project/smile')[1],
            SMILE1_PERCENT=emotion_image_data[1][0],
-           SMILE2_PATH=emotion_image_data[2][1],
+           SMILE2_PATH=emotion_image_data[2][1].split('project/smile')[1],
            SMILE2_PERCENT=emotion_image_data[2][0],
-           SMILE3_PATH=emotion_image_data[3][1],
+           SMILE3_PATH=emotion_image_data[3][1].split('project/smile')[1],
            SMILE3_PERCENT=emotion_image_data[3][0],)
 
+    emotion_image_data[0] = None
+    emotion_image_data[1] = None
+    emotion_image_data[2] = None
+    emotion_image_data[3] = None
     q.save()
     return render(request, 'service/mainpage1.html')
 
