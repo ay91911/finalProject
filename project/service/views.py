@@ -46,7 +46,7 @@ def compare_photos(request):
         'faces': face_latest,
         'percent' : percent_max,
         'best_smile':best_smile,
-        'list': face_list,
+        'list': face_list
 
     }
 
