@@ -1,0 +1,122 @@
+.bg-signiture {
+    background-color: #1abc9c;
+  }
+
+.display-4 {
+    text-align : center;
+    font-weight: bold
+}
+
+.lead {
+    text-align : center;
+}
+
+.container {
+    width : 1200px;
+    height : 350px;
+    padding-right: 300px;
+    padding-left: 300px;
+    margin-right: 0px;
+    margin-left: 0px;
+    background-color: black;
+}
+
+.feature1 {
+    background-color: #f3f3f3;
+    position: relative;
+    margin: 0;
+    padding: 40px;
+    text-align: right;
+}
+
+.pull-left {
+    float: left;
+    max-width: 100%;
+    margin: 10px;
+}
+
+.pull-right {
+    float: right;
+    max-width: 100%;
+    margin: 10px;
+}
+
+footer {
+
+    width:100%;
+    height:50px;
+    padding: 10px 10px 10px 10px;
+    bottom: 0;
+    position: absolute;
+}
+
+.jumbotron {
+    padding: 10px 0px 10px 0px;
+    position: relative;
+}
+
+.viewer {
+    width: 1200px;
+    height: 100%;
+    background-color: black;
+    margin-bottom: 100px;
+
+}
+
+.btn-group {
+    height: 50px;
+    margin-top : 20px;
+}
+
+
+.timer {
+    font-weight: bold;
+    font-size: xx-large;
+    color: #1abc9c;
+    text-align: center;
+}
+
+
+.comparetitle {
+    font-weight: bold;
+    text-align: center;
+    margin: 50px 50px 30px 50px;
+}
+
+.comparephoto {
+    margin: auto;
+    width: 800px;
+    border-radius: 25px;
+    box-shadow: 5px 5px 10px ; 
+}
+
+.bestdate {
+    margin-left: 50px;
+    color: white;
+}
+.a1 {
+    background-color: gray;
+    border-radius: 25px 25px 0px 0px;
+}
+
+.c1 {
+    text-align: center;
+    margin-left: 50px;
+    width: 300px;
+    height: 350px;
+}
+
+.c2 {
+    text-align: center;
+    width: 200px;
+    height: 150px;
+}
+
+.photo4 {
+    width: 125px;
+    height: 150px;
+}
+
+.links {
+    text-align: center;
+}

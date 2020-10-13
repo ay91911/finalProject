@@ -13,7 +13,6 @@ urlpatterns = [
         path('5/', empathy_views.training5, name='training5'),
         path('6/', empathy_views.training6, name='training6'),
         path('7/', empathy_views.training_result, name='training_result'),
-        path('mainpage/', empathy_views.mainpage, name='mainpage'),
 
         path('1/test', empathy_views.happy_training, name='happy_training'),
         path('2/test', empathy_views.angry_training, name='angry_training'),
