@@ -6,47 +6,49 @@
 
     <table class="comparephoto" bgcolor = "#e9eeec">
         <tr>
-            <td colspan="3" class="a1"><h5 class="bestdate">{{ faces.STUDY_DATE }}</h5></td>
+            <td colspan="3" class="a1"><h5 class="bestdate" style="font-size:18px; padding:10px 0 0 0; " >학습시간: {{ faces.STUDY_DATE|date:'Y-m-d H:i' }}</h5></td>
         </tr>
         <tr style="height: 50px;">
             <td><img src="/static/status/smilemark.png" style="margin:20px 0 0 50px; width: 50px; height: 50px;"></td>
         </tr>
         <tr>
 
-            <td class=c1 rowspan="2"><img src="{{ best_smile }}" width="320" height="240"></td>
+            <td class=c1 rowspan="2"><a href="{{ best_smile }}">
+                <img src="{{ best_smile }}" width="320" height="240"></a></td>
 
-            <td class=c2><img src="{{ faces.NEUTRAL_PATH}}" class="photo4" ></td>
-            <td class=c2><img src="{{ faces.SMILE1_PATH}}" class="photo4" ></td>
+            <td class=c2><a href="{{ faces.NEUTRAL_PATH}}"><img src="{{ faces.NEUTRAL_PATH}}" class="photo4" ></a></td>
+            <td class=c2><a href="{{ faces.SMILE1_PATH}}"><img src="{{ faces.SMILE1_PATH}}" class="photo4" ></a></td>
         </tr>
         <tr>
-            <td class=c2><img src="{{ faces.SMILE2_PATH}}" class="photo4" ></td>
-            <td class=c2><img src="{{ faces.SMILE3_PATH}}" class="photo4" ></td>
+            <td class=c2><a href="{{ faces.SMILE2_PATH}}"><img src="{{ faces.SMILE2_PATH}}" class="photo4" ></a></td>
+            <td class=c2><a href="{{ faces.SMILE3_PATH}}"><img src="{{ faces.SMILE3_PATH}}" class="photo4" ></a></td>
         </tr>
         <tr>
-            <td class=d1><b style="margin-left: 50px;">{{ percent }}</b><img src="/static/status/smilegauge.png" style="margin:0 0 30px 50px;"></td>
+            <td class=d1><b style="margin-left: 50px;">웃음지수  :  {{ percent }}</b><img src="/static/status/smilegauge.png" style="margin:0 0 30px 50px;"></td>
             <td style="text-align: center;"><a href="https://m.blog.naver.com/PostView.nhn?blogId=missalz&logNo=220718020044&proxyReferer=https:%2F%2Fwww.google.com%2F">공유하기</a></td>
             <td style="text-align: center;"><a href="https://m.blog.naver.com/PostView.nhn?blogId=missalz&logNo=220718020044&proxyReferer=https:%2F%2Fwww.google.com%2F">사진 바로가기</a></td>
         </tr>
     </table>
 
-
-    <table class="photohistory" bgcolor = "#e9eeec">
-      <tr>
-        <td colspan="4" class="a2"><h5 class="bestdate">20201008</h5></td>
-      </tr>
-      <tr height=30px>
-        <td></td>
-      </tr>
-      <tr>
-        <td class=c2><img src="stark2.jpg" class="photo4" ></td>
-        <td class=c2><img src="stark2.jpg" class="photo4" ></td>
-        <td class=c2><img src="stark2.jpg" class="photo4" ></td>
-        <td class=c2><img src="stark2.jpg" class="photo4" ></td>
-      </tr>
-      <tr height=30px></tr>>
-        <td</td>
-      </tr>
-    </table>
+    {% for i in list %}
+        <table class="photohistory" bgcolor = "#e9eeec">
+          <tr>
+            <td colspan="4" class="a2"><h5 class="bestdate">학습시간: {{ i.STUDY_DATE|date:'Y-m-d H:i' }}</h5></td>
+          </tr>
+          <tr height=30px>
+            <td></td>
+          </tr>
+          <tr>
+            <td class=c2><a href="{{ i.NEUTRAL_PATH}}"><img src="{{ i.NEUTRAL_PATH}}" class="photo4" ></a></td>
+            <td class=c2><a href="{{ i.SMILE1_PATH}}"><img src="{{ i.SMILE1_PATH}}" class="photo4" ></a></td>
+            <td class=c2><a href="{{ i.SMILE2_PATH}}"><img src="{{ i.SMILE2_PATH}}" class="photo4" ></a></td>
+            <td class=c2><a href="{{ i.SMILE3_PATH}}"><img src="{{ i.SMILE3_PATH}}" class="photo4" ></a></td>
+          </tr>
+          <tr height=30px></tr>>
+            <td</td>
+          </tr>
+        </table>
+    {% endfor %}
 
 
 {% endblock content %}
