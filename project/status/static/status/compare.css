@@ -47,7 +47,6 @@ footer {
     height:50px;
     padding: 10px 10px 10px 10px;
     bottom: 0;
-    position: absolute;
 }
 
 .jumbotron {
@@ -109,11 +108,6 @@ footer {
 .c2 {
     text-align: center;
     width: 200px;
-    height: 150px;
-}
-
-.photo4 {
-    width: 125px;
     height: 150px;
 }
 
